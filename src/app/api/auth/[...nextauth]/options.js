@@ -15,7 +15,7 @@ export const authOptions = {
         await connectDB();
 
         const { password, username } = credentials;
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ name: username });
         if (!user) return null;
 
         const isAuth = await bcrypt.compare(password, user.password);

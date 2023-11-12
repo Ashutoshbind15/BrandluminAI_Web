@@ -1,6 +1,7 @@
 import User from "@/app/models/User";
 import { connectDB } from "@/app/utils/db";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
   await connectDB();
@@ -17,5 +18,5 @@ export async function POST(req) {
     email,
   });
 
-  return Response.json(user);
+  return NextResponse.json(user);
 }
