@@ -1,18 +1,21 @@
+"use client";
+
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { SessionProvider } from "next-auth/react";
 
 const Layout = ({ children, session }) => {
   return (
-    <div>
-      <nav>
+    <SessionProvider session={session}>
+      <nav className="top-0 sticky">
         <Navbar />
       </nav>
-      <main>{children}</main>
+      <main className="min-h-screen bg-white text-black">{children}</main>
       <footer>
         <Footer />
       </footer>
-    </div>
+    </SessionProvider>
   );
 };
 

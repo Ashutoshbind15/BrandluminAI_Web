@@ -2,18 +2,17 @@
 
 import { UploadButton } from "@uploadthing/react";
 
-export default function UploaderButton() {
+export default function UploaderButton({ onSuccess, onError }) {
   return (
     <UploadButton
       endpoint="videoUploader"
       onClientUploadComplete={(res) => {
         // Do something with the response
-        console.log("Files: ", res);
-        alert("Upload Completed");
+        onSuccess(res);
       }}
       onUploadError={(error) => {
         // Do something with the error.
-        alert(`ERROR! ${error.message}`);
+        onError();
       }}
     />
   );

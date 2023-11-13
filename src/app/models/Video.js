@@ -5,9 +5,9 @@ const VideoSchema = new mongoose.Schema({
     type: String,
     required: "File URL is required",
   },
+  fileId: String,
   title: {
     type: String,
-    required: "Title is required",
   },
   description: String,
   data: {
@@ -17,6 +17,6 @@ const VideoSchema = new mongoose.Schema({
   },
 });
 
-const Video = mongoose.model("Video", VideoSchema);
+const Video = mongoose.models.Video || mongoose.model("Video", VideoSchema);
 
 export default Video;
