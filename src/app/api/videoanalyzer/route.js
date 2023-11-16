@@ -40,35 +40,12 @@ export const POST = async (req, res) => {
     const video = await uploadVideo(accessToken, url, name);
     const vid = video?.id;
 
-    let getter = await analyzeVideo(accessToken, vid);
+    const dbVid = await Video.findOne({ fileUrl: url });
+    dbVid.fileId = vid;
 
-    while (getter?.state !== "Processed") {
-      //set delay of 5 seconds
+    await dbVid.save();
 
-      //have a real time data push in here
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      console.log("waiting for video to be processed");
-      getter = await analyzeVideo(accessToken, vid);
-      console.log(getter?.state);
-    }
-
-    console.log(getter);
-
-    const dbVideo = await Video.findOne({ fileUrl: url });
-
-    const updatedVideo = await Video.findByIdAndUpdate(
-      dbVideo?._id,
-      {
-        data: { insights: getter?.summarizedInsights, videos: getter?.videos },
-        fileId: vid,
-      },
-      { new: true }
-    );
-
-    return NextResponse.json(
-      { video, url, name, updatedVideo },
-      { status: 200 }
-    );
+    return NextResponse.json({ video, url, name }, { status: 200 });
   } catch (error) {
     console.log(error);
     if (error.response.status === 401) {
