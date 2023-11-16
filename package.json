@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@remotion/cli": "^4.0.70",
     "@uploadthing/react": "^5.7.0",
     "axios": "^1.6.1",
     "bcryptjs": "^2.4.3",
@@ -19,6 +20,7 @@
     "openai": "^4.19.0",
     "react": "^18",
     "react-dom": "^18",
+    "remotion": "^4.0.70",
     "uploadthing": "^5.7.4",
     "uuid": "^9.0.1"
   },
