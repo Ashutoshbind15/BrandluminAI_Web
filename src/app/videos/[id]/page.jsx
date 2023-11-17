@@ -23,6 +23,12 @@ const VideoPage = async ({ params }) => {
       >
         Edit
       </Link>
+      <Link
+        href={`/videos/${id}/createcontent`}
+        className="rounded-lg py-2 px-4 bg-blue-700 text-white"
+      >
+        Create Content
+      </Link>
     </div>
   );
 };
