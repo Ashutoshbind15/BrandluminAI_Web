@@ -27,6 +27,7 @@ export const MyComposition = ({ sections, videoUrl }) => {
                 Math.ceil(parseTime(section?.instances[0].end)) * 30 -
                 Math.ceil(parseTime(section?.instances[0].start)) * 30
               }
+              className="flex flex-col items-center justify-between"
             >
               <Video
                 startFrom={
@@ -35,6 +36,7 @@ export const MyComposition = ({ sections, videoUrl }) => {
                 endAt={Math.ceil(parseTime(section?.instances[0].end)) * 30}
                 src={videoUrl}
               />
+              <p className="mb-6">{section.text}</p>
             </Sequence>
           );
         })}

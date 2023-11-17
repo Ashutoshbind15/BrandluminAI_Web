@@ -18,14 +18,6 @@ const Videopanes = ({ video }) => {
   const isSentimentsPresent = insights?.sentiments?.length > 0 ? true : false;
   const isLabelsPresent = insights?.labels?.length > 0 ? true : false;
 
-  console.log(
-    isTranscriptPresent,
-    isTopicsPresent,
-    isFacesPresent,
-    isSentimentsPresent,
-    isLabelsPresent
-  );
-
   return (
     <div className="">
       <div className="flex items-center justify-around">
@@ -110,8 +102,6 @@ const Videopanes = ({ video }) => {
             </div>
           ))}
       </div>
-      {currentVideoPane === 0 && <div>{JSON.stringify(videoData)}</div>}
-      {currentVideoPane === 1 && <div>{JSON.stringify(insights)}</div>}
     </div>
   );
 };
