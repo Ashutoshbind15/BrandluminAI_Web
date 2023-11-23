@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@remotion/cli": "^4.0.70",
+    "@uiw/react-md-editor": "^3.25.6",
     "@uploadthing/react": "^5.7.0",
     "axios": "^1.6.1",
     "bcryptjs": "^2.4.3",

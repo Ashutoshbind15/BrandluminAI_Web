@@ -4,13 +4,9 @@ import Link from "next/link";
 import React from "react";
 
 const VideoPage = async ({ params }) => {
-  console.log(params);
   const { id } = params;
-
   if (id === "undefined") return <div>404</div>;
-
   const video = await Video.findById(id);
-
   const parsedVideo = JSON.parse(JSON.stringify(video));
 
   return (

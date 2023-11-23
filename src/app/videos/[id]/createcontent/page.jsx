@@ -2,15 +2,23 @@
 
 import { getPusherClientInstance } from "@/app/utils/pusherjs";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import MDEditor from "@uiw/react-md-editor";
 
 const ContentCreationPage = ({ params }) => {
   const { id } = params;
   const [data, setData] = useState(null);
   const [transcripts, setTranscripts] = useState(null);
   const [resStream, setResStream] = useState([]);
-
   const [resString, setResString] = useState("");
+
+  const markdown = `
+  # Hello world!
+  Check the EditorComponent.tsx file for the code .
+  `;
+  const [value, setValue] = useState(markdown);
+
+  console.log(value);
 
   const clientMessages = [
     {
@@ -86,13 +94,10 @@ const ContentCreationPage = ({ params }) => {
       }
     );
     console.log(res);
-    console.log(transcripts);
-    console.log(clientMessages);
   };
 
   return (
     <div>
-      {/* <div className="my-6 shadow-lg rounded-lg">{JSON.stringify(data)}</div> */}
       <div className="my-6 shadow-lg rounded-lg">
         {JSON.stringify(transcripts)}
       </div>
@@ -101,6 +106,22 @@ const ContentCreationPage = ({ params }) => {
       </div>
       <div className="my-6 shadow-lg rounded-lg">{resString}</div>
 
+      <MDEditor value={value} onChange={setValue} className="mx-6" />
+
+      <button
+        onClick={async () => {
+          const { data } = await axios.post("/api/blogs/medium/publish", {
+            type: "md",
+            content: value,
+            token: process.env.MED_TOKEN,
+            mediumId: process.env.MED_ID,
+          });
+        }}
+      >
+        Publish
+      </button>
+
+      <br />
       <button onClick={submissionHandler}>Generate in a click!</button>
     </div>
   );
