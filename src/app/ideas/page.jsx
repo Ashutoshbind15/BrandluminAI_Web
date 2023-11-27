@@ -3,12 +3,27 @@
 import MDEditor from "@uiw/react-md-editor";
 import React, { useState } from "react";
 import IdeaList from "../components/Components/Ideas/IdeaList";
+import { useEffect } from "react";
+import axios from "axios";
+import { ideatypes } from "../models/Idea";
 
 const IdeasPage = () => {
   const markdown = `
   # Hello world!
   Check the EditorComponent.tsx file for the code .
   `;
+
+  const [ideas, setIdeas] = useState([]);
+  const [selectedIdeaCategory, setSelectedIdeaCategory] = useState("All");
+
+  useEffect(() => {
+    const helper = async () => {
+      const { data } = await axios.get("/api/idea");
+      setIdeas(data);
+    };
+
+    helper();
+  }, []);
 
   const [value, setValue] = useState(markdown);
   return (
@@ -26,9 +41,21 @@ const IdeasPage = () => {
             />
           </div>
         </div>
-        <div className="w-2/5 bg-orange-50">
-          <IdeaList ideas={[{ text: "Idea1" }, { text: "Idea2" }]} />
-          <IdeaList ideas={[{ text: "Idea1" }, { text: "Idea2" }]} />
+        <div className="w-2/5 bg-orange-50 flex items-center">
+          <div className="w-4/5">
+            {ideas && (
+              <IdeaList
+                ideas={ideas.filter(
+                  (idea) => idea.type === selectedIdeaCategory
+                )}
+              />
+            )}
+          </div>
+          <div className="flex-1 flex flex-col">
+            {ideatypes.map((type) => (
+              <div onClick={() => setSelectedIdeaCategory(type)}>{type}</div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
