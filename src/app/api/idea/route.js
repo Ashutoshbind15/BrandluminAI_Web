@@ -11,3 +11,14 @@ export const GET = async (req, res) => {
     return NextResponse.json(error, { status: 500 });
   }
 };
+
+export const POST = async (req, res) => {
+  try {
+    await connectDB();
+    const jsonBody = await req.json();
+    const idea = await Idea.create(jsonBody);
+    return NextResponse.json(idea, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+};

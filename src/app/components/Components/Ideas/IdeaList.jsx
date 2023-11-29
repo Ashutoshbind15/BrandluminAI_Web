@@ -9,7 +9,7 @@ const IdeaList = ({ ideas }) => {
             className="rounded-lg border-1 border-black px-4 py-2 flex"
             key={index}
           >
-            <div>{idea.text}</div>
+            <div>{idea.title}</div>
           </div>
         );
       })}

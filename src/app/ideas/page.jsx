@@ -5,7 +5,8 @@ import React, { useState } from "react";
 import IdeaList from "../components/Components/Ideas/IdeaList";
 import { useEffect } from "react";
 import axios from "axios";
-import { ideatypes } from "../models/Idea";
+
+const ideatypes = ["video", "blog", "shorts", "podcast", "idea"];
 
 const IdeasPage = () => {
   const markdown = `
@@ -37,7 +38,7 @@ const IdeasPage = () => {
             <MDEditor
               value={value}
               onChange={setValue}
-              style={{ whiteSpace: "pre-wrap" }}
+              style={{ whiteSpace: "pre-wrap", minHeight: "500px" }}
             />
           </div>
         </div>
@@ -51,9 +52,18 @@ const IdeasPage = () => {
               />
             )}
           </div>
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col py-4">
             {ideatypes.map((type) => (
-              <div onClick={() => setSelectedIdeaCategory(type)}>{type}</div>
+              <div
+                onClick={() => setSelectedIdeaCategory(type)}
+                className={`${
+                  selectedIdeaCategory === type
+                    ? "bg-blue-700 text-white"
+                    : null
+                } hover:cursor-pointer rounded-md px-4 py-2`}
+              >
+                {type}
+              </div>
             ))}
           </div>
         </div>
