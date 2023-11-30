@@ -9,6 +9,7 @@ const TeamSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    url: String,
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
   },
   { timestamps: true }

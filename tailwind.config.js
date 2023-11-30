@@ -18,6 +18,12 @@ export default withUt({
       borderWidth: {
         1: "1px",
       },
+      backgroundColor: {
+        primary: "bg-blue-700",
+      },
+      colors: {
+        primary: "#1d4ed8",
+      },
     },
   },
   plugins: [
