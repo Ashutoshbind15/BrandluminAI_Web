@@ -21,6 +21,9 @@ const Navbar = () => {
         <Link href="/schedule" className="mr-4">
           Schedule
         </Link>
+        <Link href="/temp" className="mr-4">
+          Random
+        </Link>
         {sess && <button onClick={() => signOut()}>Logout</button>}
         {!sess && <Link href={"/auth"}>Login</Link>}
       </div>
