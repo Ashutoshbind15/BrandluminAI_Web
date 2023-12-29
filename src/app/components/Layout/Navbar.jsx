@@ -18,6 +18,9 @@ const Navbar = () => {
         <Link href="/ideas" className="mr-4">
           Ideas
         </Link>
+        <Link href="/schedule" className="mr-4">
+          Schedule
+        </Link>
         {sess && <button onClick={() => signOut()}>Logout</button>}
         {!sess && <Link href={"/auth"}>Login</Link>}
       </div>

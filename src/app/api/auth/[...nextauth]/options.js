@@ -14,11 +14,20 @@ export const authOptions = {
       async authorize(credentials) {
         await connectDB();
 
-        const { password, username } = credentials;
-        const user = await User.findOne({ name: username });
+        const { email, password } = credentials;
+        const user = await User.findOne({ email: email });
         if (!user) return null;
 
-        const isAuth = await bcrypt.compare(password, user.password);
+        const plaintextPassword = password;
+        const userSalt = user.salt;
+
+        const hashedPassword = await bcrypt.hash(
+          plaintextPassword,
+          userSalt ?? ""
+        );
+
+        const isAuth = hashedPassword === user.password;
+
         if (!isAuth) return null;
 
         return {

@@ -8,13 +8,20 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: "Email is required",
       unique: true,
     },
-    password: String,
-    role: String,
+    password: {
+      type: String,
+      required: "Password is required",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
     videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
-    accessToken: String,
+    salt: String,
+    accounts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Account" }],
   },
   { timestamps: true }
 );

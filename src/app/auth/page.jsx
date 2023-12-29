@@ -25,7 +25,7 @@ const AuthPage = () => {
     console.log(data);
 
     signIn("credentials", {
-      username,
+      email,
       password,
       callbackUrl: "/",
     });
@@ -35,7 +35,7 @@ const AuthPage = () => {
     e.preventDefault();
 
     signIn("credentials", {
-      username,
+      email,
       password,
       callbackUrl: "/",
     });
@@ -51,15 +51,15 @@ const AuthPage = () => {
         className="text-black flex flex-col items-center"
       >
         <div className="flex flex-col items-center">
-          <label htmlFor="username" className="">
-            Username
+          <label htmlFor="email" className="">
+            Email
           </label>
           <input
-            type="text"
-            name="username"
-            id="username"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
+            type="email"
+            name="email"
+            id="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
             className="border-y-2 border-black rounded-full py-2 px-4"
           />
         </div>
@@ -80,15 +80,15 @@ const AuthPage = () => {
 
         {signup && (
           <div className="flex flex-col items-center">
-            <label htmlFor="email" className="">
-              Email
+            <label htmlFor="username" className="">
+              Username
             </label>
             <input
-              type="email"
-              name="email"
-              id="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              type="text"
+              name="username"
+              id="username"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
               className="border-y-2 border-black rounded-full py-2 px-4"
             />
           </div>
