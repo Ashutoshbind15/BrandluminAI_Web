@@ -1,7 +1,7 @@
 import React from "react";
 
-const Sample = () => {
-  return <div>Sample</div>;
+const Temp = () => {
+  return <div>Temp</div>;
 };
 
-export default Sample;
+export default Temp;

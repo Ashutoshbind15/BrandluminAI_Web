@@ -17,7 +17,7 @@ const Navbar = () => {
         <Link href="/schedule" className="px-2">
           <CalendarFilled />
         </Link>
-        <Link href="/generate" className="px-2">
+        <Link href="/post/assistant" className="px-2">
           <StarFilled />
         </Link>
       </div>
@@ -34,6 +34,12 @@ const Navbar = () => {
           className="px-4 border-r-1 border-black hover:font-semibold hover:decoration-black active:underline hover:underline"
         >
           Ideas
+        </Link>
+        <Link
+          href="/post"
+          className="px-4 border-r-1 border-black hover:font-semibold hover:decoration-black active:underline hover:underline"
+        >
+          Post
         </Link>
 
         <Link
