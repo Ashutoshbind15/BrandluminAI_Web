@@ -31,3 +31,7 @@
 .chartjs-color-0-2 {
   @apply bg-gray-600 border-gray-600;
 }
+
+.btm-shadow {
+  box-shadow: 0 4px 4px -4px black;
+}
