@@ -9,10 +9,6 @@ const SideBars = ({
   selectedElementStyleString,
   keyedElements,
 }) => {
-  console.log("sideBarState", sideBarState);
-  console.log("elements", elements);
-  console.log(setSideBarState);
-
   if (keyedElements) {
     return (
       <div className={`${className}`}>
