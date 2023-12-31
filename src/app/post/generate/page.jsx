@@ -10,7 +10,14 @@ import SideBars from "../../components/Layout/SideBars";
 import Modal from "react-modal";
 import TopBars from "@/app/components/Layout/TopBars";
 import PrimaryButton from "@/app/components/UI/Buttons/PrimaryButton";
-import { CloseSquareOutlined } from "@ant-design/icons";
+import {
+  CloseSquareOutlined,
+  FacebookOutlined,
+  InstagramOutlined,
+  LinkedinOutlined,
+  TwitterOutlined,
+  YoutubeOutlined,
+} from "@ant-design/icons";
 const ideatypes = ["video", "blog", "shorts", "podcast", "idea"];
 Modal.setAppElement("#wrapper");
 
@@ -27,6 +34,8 @@ const IdeasPage = () => {
   const [editorState, setEditorState] = useState("Post");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openPosts, setOpenPosts] = useState([]);
+
+  const [socialState, setSocialState] = useState("Instagram");
 
   console.log(openPosts);
 
@@ -74,6 +83,76 @@ const IdeasPage = () => {
                 );
               })}
             </div>
+
+            <TopBars
+              state={socialState}
+              setState={setSocialState}
+              listItems={[
+                "All",
+                "Instagram",
+                "Facebook",
+                "Twitter",
+                "LinkedIn",
+                "Youtube",
+              ]}
+              keyedItems={[
+                {
+                  key: "All",
+                  element: (
+                    <div className="flex items-center">
+                      <span className="ml-2">All</span>
+                    </div>
+                  ),
+                },
+                {
+                  key: "Instagram",
+                  element: (
+                    <div className="flex items-center">
+                      <InstagramOutlined />
+                      <span className="ml-2">Instagram</span>
+                    </div>
+                  ),
+                },
+                {
+                  key: "Facebook",
+                  element: (
+                    <div className="flex items-center">
+                      <FacebookOutlined />
+                      <span className="ml-2">Facebook</span>
+                    </div>
+                  ),
+                },
+                {
+                  key: "Twitter",
+                  element: (
+                    <div className="flex items-center">
+                      <TwitterOutlined />
+                      <span className="ml-2">Twitter</span>
+                    </div>
+                  ),
+                },
+                {
+                  key: "LinkedIn",
+                  element: (
+                    <div className="flex items-center">
+                      <LinkedinOutlined />
+                      <span className="ml-2">LinkedIn</span>
+                    </div>
+                  ),
+                },
+                {
+                  key: "Youtube",
+                  element: (
+                    <div className="flex items-center">
+                      <YoutubeOutlined />
+                      <span className="ml-2">Youtube</span>
+                    </div>
+                  ),
+                },
+              ]}
+              selectedItemStyles="bg-white text-black"
+              parentStyles={"pt-2 pb-4 pl-2 border-x-1 border-black"}
+            />
             <div className="flex w-full">
               <div className="w-1/5 border-1 border-black flex">
                 <SideBars
