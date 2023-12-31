@@ -11,7 +11,7 @@ import InfoCards from "../Dashboard/InfoCards";
 
 const IdeaListItemLg = () => {
   return (
-    <div className="border-y-1 border-black py-4 flex items-center justify-around my-4">
+    <div className="border-y-1 border-black py-4 flex items-center justify-around my-8">
       <div className="flex flex-col items-center">
         <div className="text-xl font-semibold">Idea</div>
         <div className="text-sm font-light">
