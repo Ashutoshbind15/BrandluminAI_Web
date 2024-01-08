@@ -10,12 +10,14 @@ export async function POST(req) {
   const jsonbody = await req.json();
   const { username, password, role, email } = jsonbody;
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  const userSalt = await bcrypt.genSalt(12);
+  const hashedPassword = await bcrypt.hash(password, userSalt);
 
   const user = await User.create({
     name: username,
     password: hashedPassword,
     role: role,
+    salt: userSalt,
     email,
   });
 

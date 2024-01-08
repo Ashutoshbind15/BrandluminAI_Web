@@ -19,6 +19,7 @@ import {
   WechatFilled,
   YoutubeOutlined,
 } from "@ant-design/icons";
+import NewTeam from "@/app/components/Client/Form/NewTeam";
 const ideatypes = ["video", "blog", "shorts", "podcast", "idea"];
 Modal.setAppElement("#wrapper");
 
@@ -175,6 +176,7 @@ const IdeasPage = () => {
                           className={
                             "bg-black text-white flex items-center justify-center my-2"
                           }
+                          key={index}
                         />
                       );
                     })
@@ -188,6 +190,7 @@ const IdeasPage = () => {
                             className={
                               "bg-black text-white flex items-center justify-center my-2"
                             }
+                            key={index}
                           />
                         );
                       })}
@@ -239,26 +242,31 @@ const IdeasPage = () => {
             </div>
           </div>
         </div>
-        <div className="w-2/5 flex items-center shadow-2xl">
-          <div className="w-4/5">
-            {ideas && (
-              <IdeaList
-                ideas={ideas.filter(
-                  (idea) => idea.type === selectedIdeaCategory
-                )}
-                addPost={(post) => setOpenPosts([...openPosts, post])}
-              />
-            )}
+        <div className="w-2/5 self-stretch flex flex-col justify-around">
+          <div className="w-full">
+            <NewTeam />
           </div>
-          <div className="flex-1 flex flex-col py-4 ml-6">
-            <SideBars
-              className="flex flex-col mx-2"
-              elementStyleString={`my-1 hover:underline hover:cursor-pointer w-full text-center decoration-black py-2 px-4`}
-              elements={ideatypes}
-              selectedElementStyleString={`bg-black text-white`}
-              sideBarState={selectedIdeaCategory}
-              setSideBarState={setSelectedIdeaCategory}
-            />
+          <div className="w-full flex items-center shadow-2xl">
+            <div className="w-4/5">
+              {ideas && (
+                <IdeaList
+                  ideas={ideas.filter(
+                    (idea) => idea.type === selectedIdeaCategory
+                  )}
+                  addPost={(post) => setOpenPosts([...openPosts, post])}
+                />
+              )}
+            </div>
+            <div className="flex-1 flex flex-col py-4 ml-6">
+              <SideBars
+                className="flex flex-col mx-2"
+                elementStyleString={`my-1 hover:underline hover:cursor-pointer w-full text-center decoration-black py-2 px-4`}
+                elements={ideatypes}
+                selectedElementStyleString={`bg-black text-white`}
+                sideBarState={selectedIdeaCategory}
+                setSideBarState={setSelectedIdeaCategory}
+              />
+            </div>
           </div>
         </div>
       </div>

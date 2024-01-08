@@ -174,6 +174,7 @@ const IdeasPage = () => {
                           className={
                             "bg-black text-white flex items-center justify-center my-2"
                           }
+                          key={index}
                         />
                       );
                     })
@@ -187,6 +188,7 @@ const IdeasPage = () => {
                             className={
                               "bg-black text-white flex items-center justify-center my-2"
                             }
+                            key={index}
                           />
                         );
                       })}

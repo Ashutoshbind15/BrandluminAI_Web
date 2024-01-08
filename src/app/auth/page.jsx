@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import UploaderButton from "../components/Components/UploaderButton";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import axios from "axios";
 
 const AuthPage = () => {
+  const { data: session, status } = useSession();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -44,6 +46,8 @@ const AuthPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center text-black ">
       {/* <UploaderButton /> */}
+      {JSON.stringify(session, null, 2)}
+      {status === "loading" && <p>Loading...</p>}
 
       <form
         action=""
@@ -105,6 +109,10 @@ const AuthPage = () => {
       <button onClick={() => setSignup((prev) => !prev)}>
         {signup ? "Login" : "Signup"}
       </button>
+
+      <button onClick={() => signIn()}>Sign in with github</button>
+
+      <button onClick={() => signOut()}>Logout</button>
     </main>
   );
 };

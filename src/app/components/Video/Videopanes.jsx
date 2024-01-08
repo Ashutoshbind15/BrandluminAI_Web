@@ -82,8 +82,8 @@ const Videopanes = ({ video }) => {
       <div className="my-12 px-4 flex flex-col">
         {vis === "transcripts" &&
           isTranscriptPresent &&
-          videoData.transcript.map((transcript) => (
-            <div className="border-y-2 border-black my-4">
+          videoData.transcript.map((transcript, idx) => (
+            <div className="border-y-2 border-black my-4" key={idx}>
               <div>{JSON.stringify(transcript)}</div>
               <div className="text-xl font-bold text-black font-mono">
                 {transcript.text}
@@ -93,8 +93,8 @@ const Videopanes = ({ video }) => {
               </div>
 
               <div>
-                {transcript?.instances?.map((instance) => (
-                  <div>
+                {transcript?.instances?.map((instance, idx) => (
+                  <div key={idx}>
                     {instance?.start} - {instance?.end}
                   </div>
                 ))}
