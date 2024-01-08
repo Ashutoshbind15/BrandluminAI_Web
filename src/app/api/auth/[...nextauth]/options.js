@@ -6,6 +6,7 @@ import Credentials from "next-auth/providers/credentials";
 import { connectDB } from "@/app/utils/db";
 import { getServerSession } from "next-auth";
 import Account from "@/app/models/Account";
+import LinkedInProvider from "next-auth/providers/linkedin";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -50,6 +51,27 @@ export const authOptions = {
         params: {
           scope: "openid https://www.googleapis.com/auth/youtube.force-ssl",
         },
+      },
+    }),
+    LinkedInProvider({
+      clientId: process.env.LINKEDIN_ID ?? "",
+      clientSecret: process.env.LINKEDIN_SECRET ?? "",
+
+      authorization: {
+        params: {
+          scope: "openid profile email w_member_social",
+        },
+      },
+      issuer: "https://www.linkedin.com",
+      jwks_endpoint: "https://www.linkedin.com/oauth/openid/jwks",
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          firstname: profile.given_name,
+          lastname: profile.family_name,
+          email: profile.email,
+        };
       },
     }),
   ],
@@ -101,15 +123,13 @@ export const authOptions = {
         await connectDB();
 
         if (account.provider !== "credentials") {
-          // user wants to link github account or to refresh token
-          // check if github account is already linked
+          // user wants to link app account or to refresh token
+          // check if app account is already linked
 
           const appAccount = await Account.findOne({
             provider: account.provider,
             userId: currSession.user.id,
           });
-
-          const currUser = await User.findById(currSession.user.id);
 
           if (appAccount) {
             const newAccessToken = account.access_token;
@@ -120,10 +140,6 @@ export const authOptions = {
 
             await appAccount.save();
           } else {
-            console.log("account not found");
-
-            console.log("account", account);
-            // return true;
             const acc = await Account.create({
               provider: account.provider,
               userId: currSession.user.id,
@@ -131,10 +147,6 @@ export const authOptions = {
               refreshToken: account.refresh_token,
               accountId: account.providerAccountId,
             });
-
-            console.log("acc", acc);
-
-            // console.log("new account", newAccount);
 
             await User.findByIdAndUpdate(currSession.user.id, {
               $push: { accounts: acc._id },
