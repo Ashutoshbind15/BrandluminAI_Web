@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const teamUserSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  roleInTeam: String,
+});
+
 const TeamSchema = new mongoose.Schema(
   {
     title: {
@@ -10,7 +15,11 @@ const TeamSchema = new mongoose.Schema(
       type: String,
     },
     url: String,
-    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
+    users: [teamUserSchema],
+    admin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
