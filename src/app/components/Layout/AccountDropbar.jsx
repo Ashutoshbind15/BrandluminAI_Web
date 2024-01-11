@@ -49,6 +49,12 @@ const AccountDropbar = ({ auth }) => {
           <PrimaryButton onClick={() => signOut()} className={"my-3"}>
             Logout
           </PrimaryButton>
+          <PrimaryButton
+            onClick={() => router.push("/auth")}
+            className={"my-3"}
+          >
+            Link Accounts
+          </PrimaryButton>
         </div>
       )}
     </div>

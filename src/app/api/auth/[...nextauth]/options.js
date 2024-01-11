@@ -1,12 +1,13 @@
 import User from "@/app/models/User";
-import GitHubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
+import Account from "@/app/models/Account";
 import bcrypt from "bcryptjs";
-import Credentials from "next-auth/providers/credentials";
 import { connectDB } from "@/app/utils/db";
 import { getServerSession } from "next-auth";
-import Account from "@/app/models/Account";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 import LinkedInProvider from "next-auth/providers/linkedin";
+import FacebookProvider from "next-auth/providers/facebook";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -72,6 +73,15 @@ export const authOptions = {
           lastname: profile.family_name,
           email: profile.email,
         };
+      },
+    }),
+    FacebookProvider({
+      clientId: process.env.INSTAGRAM_ID,
+      clientSecret: process.env.INSTAGRAM_SECRET,
+      authorization: {
+        params: {
+          scope: "instagram_content_publish pages_manage_posts",
+        },
       },
     }),
   ],

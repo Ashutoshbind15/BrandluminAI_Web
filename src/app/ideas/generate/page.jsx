@@ -11,6 +11,8 @@ import Modal from "react-modal";
 import TopBars from "@/app/components/Layout/TopBars";
 import PrimaryButton from "@/app/components/UI/Buttons/PrimaryButton";
 import {
+  CloseOutlined,
+  CloseSquareFilled,
   CloseSquareOutlined,
   FacebookOutlined,
   InstagramOutlined,
@@ -20,6 +22,7 @@ import {
   YoutubeOutlined,
 } from "@ant-design/icons";
 import NewTeam from "@/app/components/Client/Form/NewTeam";
+import Editor from "@/app/components/Components/Ideas/Editor";
 const ideatypes = ["video", "blog", "shorts", "podcast", "idea"];
 Modal.setAppElement("#wrapper");
 
@@ -54,107 +57,49 @@ const IdeasPage = () => {
   return (
     <div>
       <Modal
-        className="h-72 w-72 bg-red-300 center"
+        className="bg-white p-8 center flex flex-col"
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Example Modal"
       >
-        <button onClick={() => setIsModalOpen(false)}>Close</button>
+        <CloseSquareFilled
+          className="self-end my-3 text-2xl"
+          onClick={() => setIsModalOpen(false)}
+        />
+
+        <div className="w-full">
+          <NewTeam />
+        </div>
       </Modal>
 
       <div className="flex justify-around items-center px-12 w-full py-6">
         <div className="flex flex-col items-center w-3/5 px-12 pt-8">
           <div className="w-full flex flex-col">
             <div className="border-t-1 border-black border-x-1 py-2 px-2 flex items-center gap-2">
-              {openPosts.map((post, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="py-2 flex items-center justify-around bg-black text-white px-4"
-                  >
-                    <div className="w-1/2 mr-4">{post.title}</div>
-                    <CloseSquareOutlined
-                      onClick={() =>
-                        setOpenPosts(
-                          openPosts.filter((p) => p._id !== post._id)
-                        )
-                      }
-                      className="w-1/2"
-                    />
-                  </div>
-                );
-              })}
+              {openPosts.length ? (
+                openPosts.map((post, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="py-2 flex items-center justify-around bg-black text-white px-4"
+                    >
+                      <div className="w-1/2 mr-4">{post.title}</div>
+                      <CloseSquareOutlined
+                        onClick={() =>
+                          setOpenPosts(
+                            openPosts.filter((p) => p._id !== post._id)
+                          )
+                        }
+                        className="w-1/2"
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <p>Select ideas to start editing</p>
+              )}
             </div>
 
-            <TopBars
-              state={socialState}
-              setState={setSocialState}
-              listItems={[
-                "All",
-                "Instagram",
-                "Facebook",
-                "Twitter",
-                "LinkedIn",
-                "Youtube",
-              ]}
-              keyedItems={[
-                {
-                  key: "All",
-                  element: (
-                    <div className="flex items-center">
-                      <span className="ml-2">All</span>
-                    </div>
-                  ),
-                },
-                {
-                  key: "Instagram",
-                  element: (
-                    <div className="flex items-center">
-                      <InstagramOutlined />
-                      <span className="ml-2">Instagram</span>
-                    </div>
-                  ),
-                },
-                {
-                  key: "Facebook",
-                  element: (
-                    <div className="flex items-center">
-                      <FacebookOutlined />
-                      <span className="ml-2">Facebook</span>
-                    </div>
-                  ),
-                },
-                {
-                  key: "Twitter",
-                  element: (
-                    <div className="flex items-center">
-                      <TwitterOutlined />
-                      <span className="ml-2">Twitter</span>
-                    </div>
-                  ),
-                },
-                {
-                  key: "LinkedIn",
-                  element: (
-                    <div className="flex items-center">
-                      <LinkedinOutlined />
-                      <span className="ml-2">LinkedIn</span>
-                    </div>
-                  ),
-                },
-                {
-                  key: "Youtube",
-                  element: (
-                    <div className="flex items-center">
-                      <YoutubeOutlined />
-                      <span className="ml-2">Youtube</span>
-                    </div>
-                  ),
-                },
-              ]}
-              selectedItemStyles="bg-white text-black"
-              parentStyles={"pt-2 pb-4 pl-2 border-x-1 border-black"}
-            />
             <div className="flex w-full">
               <div className="w-1/5 border-1 border-black flex">
                 <SideBars
@@ -200,52 +145,12 @@ const IdeasPage = () => {
                 </div>
               </div>
               <div className="w-4/5 flex flex-col items-center border-b-1 border-r-1 border-t-1 py-4 border-black">
-                <TopBars
-                  listItems={["Post", "Preview"]}
-                  state={editorState}
-                  setState={setEditorState}
-                  selectedItemStyles={
-                    "bg-white text-black decoration-black underline"
-                  }
-                  parentStyles="px-6 w-full flex justify-around items-center mb-4"
-                />
-                <MDEditor
-                  value={value}
-                  onChange={setValue}
-                  style={{
-                    whiteSpace: "pre-wrap",
-                    minHeight: "500px",
-                    width: "100%",
-                  }}
-                  onResize={(height) => {
-                    console.log(height);
-                    return height;
-                  }}
-                />
-                <div className="mt-6 w-full flex items-center justify-between px-4">
-                  <div className="flex flex-col">
-                    <PrimaryButton className="my-2">Post</PrimaryButton>
-                    <PrimaryButton className="my-2 flex items-center">
-                      <div className="px-3">Assistance</div>
-                      <WechatFilled />
-                    </PrimaryButton>
-                  </div>
-                  <select className="bg-black text-white px-6 py-1">
-                    <option value="video">Video</option>
-                    <option value="blog">Blog</option>
-                    <option value="shorts">Shorts</option>
-                    <option value="podcast">Podcast</option>
-                    <option value="idea">Idea</option>
-                  </select>
-                </div>
+                <Editor />
               </div>
             </div>
           </div>
         </div>
         <div className="w-2/5 self-stretch flex flex-col justify-around">
-          <div className="w-full">
-            <NewTeam />
-          </div>
           <div className="w-full flex items-center shadow-2xl">
             <div className="w-4/5">
               {ideas && (
