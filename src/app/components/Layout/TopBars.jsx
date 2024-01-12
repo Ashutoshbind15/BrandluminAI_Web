@@ -9,13 +9,14 @@ const TopBars = ({
   selectedItemStyles,
   keyedItems,
 }) => {
+  console.log(keyedItems);
   return (
     <div className={`${parentStyles} flex items-center justify-around`}>
       {listItems.map((item, index) => (
         <button
           key={index}
           onClick={() => setState(item)}
-          className={`${itemStyles} bg-black py-2 flex-1 px-2 ${
+          className={`${itemStyles} bg-black py-2 px-2 ${
             state === item ? selectedItemStyles : "text-white"
           } ${index > 0 ? `mx-2` : "mr-2"}`}
         >

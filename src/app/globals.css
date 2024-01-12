@@ -35,3 +35,22 @@
 .btm-shadow {
   box-shadow: 0 4px 4px -4px black;
 }
+
+.editor ol {
+  list-style: decimal inside;
+  margin-left: 1rem; /* Adjust as needed */
+}
+
+.editor ul {
+  list-style: disc inside;
+  margin-left: 1rem; /* Adjust as needed */
+}
+
+/* Style for code blocks */
+.editor .public-DraftStyleDefault-pre {
+  background-color: #e2e8f0; /* This is Tailwind's slate-300 */
+  margin: 1rem 0;
+  padding: 1rem;
+  white-space: pre-wrap;
+  font-family: monospace;
+}
