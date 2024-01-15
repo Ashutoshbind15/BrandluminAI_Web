@@ -1,77 +1,135 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  AliwangwangOutlined,
-  BoldOutlined,
-  CodeOutlined,
-  FileImageFilled,
-  GoogleOutlined,
-  GooglePlusOutlined,
-  ItalicOutlined,
-  OrderedListOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import TopBars from "../components/Layout/TopBars";
-import SideBars from "../components/Layout/SideBars";
-import PrimaryButton from "../components/UI/Buttons/PrimaryButton";
-import EditorVisual from "../components/Components/Ideas/Editorwysiwyg";
+import React from "react";
 import RichtextEditor from "../components/Components/Ideas/RichtextEditor";
+import Stepper from "../components/UI/Navigation/Stepper";
+import MediaGlobe from "../components/Components/Ideas/MediaGlobe";
+import TagSelector from "../components/Components/Ideas/TagSelector";
+import MoodSelector from "../components/Components/Ideas/MoodSelector";
+import AgeRangeSlider from "../components/Components/Ideas/AgeSelector";
+import { SmileFilled, SmileOutlined } from "@ant-design/icons";
+import dynamic from "next/dynamic";
+import AnimatedButton from "../components/UI/Buttons/AnimatedButton";
+import LengthCustomizationSlider from "../components/UI/Sliders/LengthCustomizationSlider";
+
+const ageIcons = [
+  { age: 65, icon: <SmileFilled /> },
+  { age: 30, icon: <SmileOutlined /> },
+  // Add more icons as needed
+];
+
+const MapWithNoSSR = dynamic(
+  () => import("../components/Components/Ideas/GlobalMap"),
+  { ssr: false }
+);
+
+const ideaStepComponent = ({ step }) => {
+  switch (step) {
+    case 1:
+      return <RichtextEditor />;
+    case 2:
+      return (
+        <div className="py-6 grid gap-y-5">
+          <MediaGlobe />
+          <TagSelector />
+          <MoodSelector />
+        </div>
+      );
+    case 3:
+      return (
+        <div className="w-full grid gap-y-8 py-12 grid-cols-2 items-center justify-items-center">
+          <p className="font-bold text-center text-xl">
+            Select the age range of your target audience
+          </p>
+          <AgeRangeSlider
+            recommendedRange={{ min: 10, max: 30 }}
+            ageIcons={ageIcons}
+          />
+
+          <div className="">
+            <MapWithNoSSR />
+          </div>
+          <p className="font-bold text-center text-xl">
+            Select the target areas of yours
+          </p>
+
+          <div className="col-span-2">
+            <p className="font-bold text-center text-xl">
+              What are the common interests of your audience
+            </p>
+          </div>
+
+          <div className="col-span-2 grid grid-cols-6 w-full">
+            <div></div>
+            <div className="col-span-4 grid grid-cols-4 gap-x-2 items-center justify-items-center h-20 gap-y-4">
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+            </div>
+            <div></div>
+          </div>
+        </div>
+      );
+    case 4:
+      return (
+        <div>
+          <LengthCustomizationSlider />
+        </div>
+      );
+    default:
+      return <div>Step 1</div>;
+  }
+};
 
 const Editor = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [sections, setSections] = useState([]);
-  const [mood, setMood] = useState("");
-  const [audience, setAudience] = useState("");
-  const [selected, setSelected] = useState("title");
-  const [editorTopbarState, setEditorTopbarState] = useState("Bold");
-  const [step, setStep] = useState(1);
-
-  const [paragraphState, setParagraphState] = useState("");
-  const [boldTextState, setBoldTextState] = useState("");
-  const [italicTextState, setItalicTextState] = useState("");
-  const [listState, setListState] = useState("");
-
-  const [visualState, setVisualState] = useState("");
-
-  const editorRef = React.useRef(null);
-
-  const keyedItems = [
-    {
-      key: "Bold",
-      element: <BoldOutlined />,
-    },
-    {
-      key: "Italic",
-      element: <ItalicOutlined />,
-    },
-    {
-      key: "Ordered List",
-      element: <OrderedListOutlined />,
-    },
-    {
-      key: "Unordered List",
-      element: <UnorderedListOutlined />,
-    },
-    {
-      key: "Image",
-      element: <FileImageFilled />,
-    },
-    {
-      key: "Code",
-      element: <CodeOutlined />,
-    },
-  ];
-
-  const contentParser = () => {
-    const value = editorRef.current.innerText;
-    console.log(value);
-  };
-
   return (
     <>
-      <div className="flex flex-col items-center w-full px-3">
+      {/* <div className="flex flex-col items-center w-full px-3">
         <div className="flex flex-col items-center border-1 border-black w-full my-3 rounded-xl px-3">
           <div className="flex items-center w-full py-4 border-b-1 border-black">
             <SideBars
@@ -148,9 +206,9 @@ const Editor = () => {
             </PrimaryButton>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <RichtextEditor />
+      <Stepper steps={[1, 2, 3, 4]} StepComponent={ideaStepComponent} />
     </>
   );
 };

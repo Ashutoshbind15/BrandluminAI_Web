@@ -21,6 +21,7 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import PrimaryButton from "../../UI/Buttons/PrimaryButton";
+import Stepper from "../../UI/Navigation/Stepper";
 
 const BlockStyleButton = ({
   onToggle,
@@ -38,9 +39,9 @@ const BlockStyleButton = ({
   return (
     <button
       onMouseDown={onMouseDown}
-      className={`p-2 btm-shadow ${
+      className={`p-2 ${
         toolbarState["blockType"] === acronym
-          ? "bg-black text-white scale-110"
+          ? "bg-black text-white scale-110 p-3"
           : null
       }`}
       // if block type is already set, deset it also
@@ -71,9 +72,9 @@ const StyleButton = ({
         e.preventDefault();
         onToggle(style);
       }}
-      className={`btm-shadow px-2 py-2 transition-all ${
+      className={`px-2 py-2 transition-all ${
         toolbarState[`is${stateAcronym}`]
-          ? `bg-black scale-110 text-white`
+          ? `bg-black scale-110 p-3 text-white`
           : null
       }`}
       onClick={() =>
@@ -173,7 +174,7 @@ const Toolbar = ({
   // Call this function whenever the editor state changes
 
   return (
-    <div className="flex items-center w-full justify-between px-6 my-3 border-y-1 border-dashed border-black py-3">
+    <div className="flex items-center w-full justify-between px-6 mb-3 border-b-1 border-dashed border-black py-3">
       <StyleButton
         onToggle={onToggleInline}
         style="BOLD"
@@ -313,7 +314,7 @@ const RichtextEditor = () => {
   };
 
   return (
-    <div className="my-16 mx-4 border-1 border-black py-2 editor">
+    <div className="mx-12 my-4 border-1 rounded-2xl border-black pb-2 editor w-full">
       <Toolbar
         onToggleInline={toggleInlineStyle}
         onToggleBlock={toggleBlockType}
@@ -338,7 +339,7 @@ const RichtextEditor = () => {
         </div>
       )}
 
-      <div className="my-3 border-y-1 border-black py-1 px-4 flex items-center justify-between">
+      <div className="my-3 py-2 px-6 border-y-1 border-black flex items-center justify-between">
         <div className="flex items-center">
           <div className="mr-3">Live</div>
           <div className="flex items-center gap-2">
@@ -354,9 +355,11 @@ const RichtextEditor = () => {
         </div>
       </div>
 
-      <PrimaryButton onClick={() => handleParse()} className={"ml-4"}>
-        Parse
-      </PrimaryButton>
+      <div className="flex items-center justify-around pb-2">
+        <PrimaryButton onClick={() => handleParse()} className={"ml-4"}>
+          Parse
+        </PrimaryButton>
+      </div>
     </div>
   );
 };

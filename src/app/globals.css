@@ -54,3 +54,44 @@
   white-space: pre-wrap;
   font-family: monospace;
 }
+
+/* Styling for age slider */
+
+.custom-track .example-track {
+  background: gray;
+  height: 10px;
+}
+
+.custom-track .example-track-selected {
+  background: black;
+}
+
+.example-thumb {
+  height: 25px;
+  line-height: 25px;
+  width: 25px;
+  text-align: center;
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.right-thumb {
+  right: -20px; /* Adjust the value as needed to shift the right thumb to the left */
+}
+
+.example-track {
+  background: #000;
+  height: 10px;
+}
+
+/* End of age slider */
+
+/* map start */
+
+.selected-regions {
+  @apply bg-white p-4 rounded shadow-lg;
+}
+
+/* map end */

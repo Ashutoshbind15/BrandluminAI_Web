@@ -24,6 +24,11 @@ export default withUt({
       colors: {
         primary: "#1d4ed8",
       },
+      minHeight: {
+        quarter: "25vh",
+        half: "50vh",
+        threequarter: "75vh",
+      },
     },
   },
   plugins: [
