@@ -1,16 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import RichtextEditor from "../components/Components/Ideas/RichtextEditor";
 import Stepper from "../components/UI/Navigation/Stepper";
 import MediaGlobe from "../components/Components/Ideas/MediaGlobe";
 import TagSelector from "../components/Components/Ideas/TagSelector";
 import MoodSelector from "../components/Components/Ideas/MoodSelector";
 import AgeRangeSlider from "../components/Components/Ideas/AgeSelector";
-import { SmileFilled, SmileOutlined } from "@ant-design/icons";
+import {
+  CloudFilled,
+  CloudOutlined,
+  FileFilled,
+  SmileFilled,
+  SmileOutlined,
+} from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import AnimatedButton from "../components/UI/Buttons/AnimatedButton";
-import LengthCustomizationSlider from "../components/UI/Sliders/LengthCustomizationSlider";
+import { Button } from "../components/utilUI/ui/button";
+import { Slider } from "../components/utilUI/ui/slider/SingleSlider";
+import MediaLimit from "../components/Components/Ideas/MediaLimit";
+import BrandGuideLines from "../components/Components/Ideas/BrandGuideLines";
+import UploaderButton from "../components/Components/UploaderButton";
 
 const ageIcons = [
   { age: 65, icon: <SmileFilled /> },
@@ -24,6 +34,8 @@ const MapWithNoSSR = dynamic(
 );
 
 const ideaStepComponent = ({ step }) => {
+  const [currSliderValues, setCurrSliderValues] = useState([20]);
+
   switch (step) {
     case 1:
       return <RichtextEditor />;
@@ -117,8 +129,21 @@ const ideaStepComponent = ({ step }) => {
       );
     case 4:
       return (
-        <div>
-          <LengthCustomizationSlider />
+        <div className="w-full grid gap-y-6">
+          <MediaLimit />
+          <BrandGuideLines />
+
+          <div className="border-dashed border-gray-600 border-2 py-16 place-items-center grid">
+            <CloudOutlined className="text-2xl mb-3" />
+            <UploaderButton
+              className={
+                "ut-button:bg-primary ut-button:ut-uploading:bg-primary ut-label:my-3 ut-label:text-muted"
+              }
+              endpoint="imageUploader"
+              onSuccess={(res) => console.log(res)}
+              onError={() => console.log("err or")}
+            />
+          </div>
         </div>
       );
     default:

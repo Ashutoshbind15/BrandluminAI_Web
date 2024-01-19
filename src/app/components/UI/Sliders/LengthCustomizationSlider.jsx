@@ -3,6 +3,7 @@
 import React from "react";
 import ReactSlider from "react-slider";
 import { motion } from "framer-motion";
+import { Button } from "../../utilUI/ui/button";
 
 const LengthCustomizationSlider = ({
   min = 0,
@@ -45,7 +46,7 @@ const LengthCustomizationSlider = ({
   return (
     <div className="w-80 h-10 rounded-lg overflow-hidden" style={gradientStyle}>
       <ReactSlider
-        className="horizontal-slider h-full "
+        className="horizontal-slider h-full"
         thumbClassName="absolute top-1/2 translate-y-1/2 h-4 w-4 bg-blue-500 rounded-full focus:outline-none"
         trackClassName="h-2 bg-gray-200"
         renderThumb={Thumb}
