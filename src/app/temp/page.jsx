@@ -21,6 +21,11 @@ import { Slider } from "../components/utilUI/ui/slider/SingleSlider";
 import MediaLimit from "../components/Components/Ideas/MediaLimit";
 import BrandGuideLines from "../components/Components/Ideas/BrandGuideLines";
 import UploaderButton from "../components/Components/UploaderButton";
+import { useAtom } from "jotai";
+import {
+  ideaCurrentStepAtom,
+  ideaParsedTextAtom,
+} from "../utils/stateStore/ideaAtoms";
 
 const ageIcons = [
   { age: 65, icon: <SmileFilled /> },
@@ -152,89 +157,23 @@ const ideaStepComponent = ({ step }) => {
 };
 
 const Editor = () => {
+  const [ideaStep] = useAtom(ideaCurrentStepAtom);
+  const [parsedText] = useAtom(ideaParsedTextAtom);
+
+  const ideaSubmissionHandler = () => {
+    console.log("idea submitted");
+    console.log(parsedText);
+  };
+
   return (
-    <>
-      {/* <div className="flex flex-col items-center w-full px-3">
-        <div className="flex flex-col items-center border-1 border-black w-full my-3 rounded-xl px-3">
-          <div className="flex items-center w-full py-4 border-b-1 border-black">
-            <SideBars
-              elements={["title", "description", "sections"]}
-              sideBarState={selected}
-              setSideBarState={setSelected}
-              selectedElementStyleString={"bg-black text-white"}
-              className={
-                "flex flex-col border-r-1 border-black pr-4 self-stretch"
-              }
-              elementStyleString={"my-2 px-4 py-1"}
-            />
-
-            <div className="flex-1 flex-col px-3">
-              <div className="flex items-center justify-between py-2 px-12 border-y-1 border-dashed border-gray-500">
-                {keyedItems.map((item, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setEditorTopbarState(item.key)}
-                    className={`hover:scale-110 transition-all ${
-                      editorTopbarState === item.key
-                        ? "bg-black text-white pb-2 px-2 underline decoration-black"
-                        : "btm-shadow pb-1"
-                    }`}
-                  >
-                    {item.element}
-                  </button>
-                ))}
-              </div>
-              <div
-                type="text"
-                name=""
-                id=""
-                className="my-4 outline-none px-2 py-2 h-96 w-full"
-                placeholder="Enter content here"
-                contentEditable={true}
-                ref={editorRef}
-              />
-
-              <div className="my-3 border-y-1 border-black py-1 px-2 flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="mr-3">Live</div>
-                  <div className="flex items-center gap-2">
-                    <AliwangwangOutlined />
-                    <AliwangwangOutlined />
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <AliwangwangOutlined />
-                  <AliwangwangOutlined />
-                  <AliwangwangOutlined />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="py-4 w-full flex items-center justify-between px-6">
-            <PrimaryButton
-              className={""}
-              onClick={() => setStep((p) => p - 1)}
-              disabled={step === 1}
-            >
-              Back
-            </PrimaryButton>
-            {step === 3 && <PrimaryButton className={""}>Submit</PrimaryButton>}
-            <PrimaryButton
-              className={""}
-              onClick={() => {
-                setStep((p) => p + 1);
-              }}
-              disabled={step === 3}
-            >
-              Next
-            </PrimaryButton>
-          </div>
-        </div>
-      </div> */}
-
+    <div className="">
       <Stepper steps={[1, 2, 3, 4]} StepComponent={ideaStepComponent} />
-    </>
+      {ideaStep === 3 && (
+        <div className="flex justify-center mb-6">
+          <Button onClick={ideaSubmissionHandler}>Submit</Button>
+        </div>
+      )}
+    </div>
   );
 };
 

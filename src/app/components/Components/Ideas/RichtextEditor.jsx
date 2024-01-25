@@ -22,6 +22,8 @@ import {
 } from "@ant-design/icons";
 import PrimaryButton from "../../UI/Buttons/PrimaryButton";
 import Stepper from "../../UI/Navigation/Stepper";
+import { useAtom } from "jotai";
+import { ideaParsedTextAtom } from "@/app/utils/stateStore/ideaAtoms";
 
 const BlockStyleButton = ({
   onToggle,
@@ -227,6 +229,7 @@ const Toolbar = ({
 };
 
 const RichtextEditor = () => {
+  const [parsedText, setParsedText] = useAtom(ideaParsedTextAtom);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const htmlContent = stateToHTML(editorState.getCurrentContent());
   const [mount, setMount] = useState(false);
@@ -303,6 +306,7 @@ const RichtextEditor = () => {
     console.log(htmlContent);
     const parsedContent = parseEditorContent(editorState);
     console.log(parsedContent);
+    setParsedText(parsedContent);
   };
 
   const toggleInlineStyle = (inlineStyle) => {

@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { ideaCurrentStepAtom } from "@/app/utils/stateStore/ideaAtoms";
 
 const DefaultStepComponent = ({ step }) => <div>{`Content for ${step}`}</div>;
 
@@ -10,16 +12,23 @@ const Stepper = ({
   StepComponent = DefaultStepComponent,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [_, setIdeaStep] = useAtom(ideaCurrentStepAtom);
 
   const isLastStep = currentStep === steps.length - 1;
   const isFirstStep = currentStep === 0;
 
   const nextStep = () => {
-    if (!isLastStep) setCurrentStep(currentStep + 1);
+    if (!isLastStep) {
+      setCurrentStep(currentStep + 1);
+      setIdeaStep(currentStep + 1);
+    }
   };
 
   const prevStep = () => {
-    if (!isFirstStep) setCurrentStep(currentStep - 1);
+    if (!isFirstStep) {
+      setCurrentStep(currentStep - 1);
+      setIdeaStep(currentStep - 1);
+    }
   };
 
   // ... (other parts of the Stepper component)
@@ -54,7 +63,10 @@ const Stepper = ({
                       ? "bg-black text-white border-black"
                       : "border-gray-300"
                   }`}
-                  onClick={() => setCurrentStep(index)}
+                  onClick={() => {
+                    setCurrentStep(index);
+                    setIdeaStep(index);
+                  }}
                 >
                   {index + 1}
                 </div>
