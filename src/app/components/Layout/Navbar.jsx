@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <div className="p-4 text-xl font-bold bg-white text-black flex items-center justify-between border-b-1 border-black">
-      <Link href={"/"}>BrandFlow</Link>
+      <Link href={"/"}>BrandLuminAI</Link>
 
       <div>
         <Link href="/schedule" className="px-2">

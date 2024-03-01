@@ -1,3 +1,4 @@
+import { EditorState } from "draft-js";
 import { atom } from "jotai";
 
 export const ideaParsedTextAtom = atom("");
@@ -18,3 +19,5 @@ export const ideaTitleAtom = atom("");
 export const ideaDescriptionAtom = atom("");
 
 export const ideaCurrentStepAtom = atom(1);
+
+export const editorAtom = atom(EditorState.createEmpty());

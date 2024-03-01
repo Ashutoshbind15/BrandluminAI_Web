@@ -7,13 +7,7 @@ import MediaGlobe from "../components/Components/Ideas/MediaGlobe";
 import TagSelector from "../components/Components/Ideas/TagSelector";
 import MoodSelector from "../components/Components/Ideas/MoodSelector";
 import AgeRangeSlider from "../components/Components/Ideas/AgeSelector";
-import {
-  CloudFilled,
-  CloudOutlined,
-  FileFilled,
-  SmileFilled,
-  SmileOutlined,
-} from "@ant-design/icons";
+import { CloudOutlined, SmileFilled, SmileOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import AnimatedButton from "../components/UI/Buttons/AnimatedButton";
 import { Button } from "../components/utilUI/ui/button";
