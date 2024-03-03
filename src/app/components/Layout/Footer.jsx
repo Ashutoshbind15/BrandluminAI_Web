@@ -15,7 +15,7 @@ const Footer = () => {
   return (
     <div className="flex px-4 py-8 text-white w-full bg-black">
       <div className="flex flex-col items-center justify-center w-1/5">
-        <div className="text-xl font-bold tracking-wider">BrandFlow</div>
+        <div className="text-xl font-bold tracking-wider">BrandLuminAI</div>
         <div className="flex items-center gap-2 my-3">
           <InstagramOutlined />
           <YoutubeOutlined />
