@@ -1,182 +1,174 @@
 "use client";
 
-import MDEditor from "@uiw/react-md-editor";
 import React, { useState } from "react";
-import IdeaList from "../../components/Components/Ideas/IdeaList";
-import { useEffect } from "react";
-import axios from "axios";
-import RoundedFace from "../../components/UI/Visuals/RoundedFace";
-import SideBars from "../../components/Layout/SideBars";
-import Modal from "react-modal";
-import TopBars from "@/app/components/Layout/TopBars";
-import PrimaryButton from "@/app/components/UI/Buttons/PrimaryButton";
+import RichtextEditor from "../../components/Components/Ideas/RichtextEditor";
+import Stepper from "../../components/UI/Navigation/Stepper";
+import MediaGlobe from "../../components/Components/Ideas/MediaGlobe";
+import TagSelector from "../../components/Components/Ideas/TagSelector";
+import MoodSelector from "../../components/Components/Ideas/MoodSelector";
+import AgeRangeSlider from "../../components/Components/Ideas/AgeSelector";
+import { CloudOutlined, SmileFilled, SmileOutlined } from "@ant-design/icons";
+import dynamic from "next/dynamic";
+import AnimatedButton from "../../components/UI/Buttons/AnimatedButton";
+import { Button } from "../../components/utilUI/ui/button";
+import { Slider } from "../../components/utilUI/ui/slider/SingleSlider";
+import MediaLimit from "../../components/Components/Ideas/MediaLimit";
+import BrandGuideLines from "../../components/Components/Ideas/BrandGuideLines";
+import UploaderButton from "../../components/Components/UploaderButton";
+import { useAtom } from "jotai";
 import {
-  CloseOutlined,
-  CloseSquareFilled,
-  CloseSquareOutlined,
-  FacebookOutlined,
-  InstagramOutlined,
-  LinkedinOutlined,
-  TwitterOutlined,
-  WechatFilled,
-  YoutubeOutlined,
-} from "@ant-design/icons";
-import NewTeam from "@/app/components/Client/Form/NewTeam";
-import Editor from "@/app/components/Components/Ideas/Editor";
-const ideatypes = ["video", "blog", "shorts", "podcast", "idea"];
-Modal.setAppElement("#wrapper");
+  ideaCurrentStepAtom,
+  ideaParsedTextAtom,
+} from "../../utils/stateStore/ideaAtoms";
 
-const IdeasPage = () => {
-  const markdown = `
-  # Hello world!
-  Check the EditorComponent.tsx file for the code .
-  `;
+const ageIcons = [
+  { age: 65, icon: <SmileFilled /> },
+  { age: 30, icon: <SmileOutlined /> },
+  // Add more icons as needed
+];
 
-  const [ideas, setIdeas] = useState([]);
-  const [selectedIdeaCategory, setSelectedIdeaCategory] = useState("All");
-  const [sidebarState, setSidebarState] = useState("Live");
-  const [dummyFaces, setDummyFaces] = useState(["Ash", "Ash", "Ash"]);
-  const [editorState, setEditorState] = useState("Post");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [openPosts, setOpenPosts] = useState([]);
+const MapWithNoSSR = dynamic(
+  () => import("../../components/Components/Ideas/GlobalMap"),
+  { ssr: false }
+);
 
-  const [socialState, setSocialState] = useState("Instagram");
+const ideaStepComponent = ({ step }) => {
+  const [currSliderValues, setCurrSliderValues] = useState([20]);
 
-  console.log(openPosts);
-
-  useEffect(() => {
-    const helper = async () => {
-      const { data } = await axios.get("/api/idea");
-      setIdeas(data);
-    };
-
-    helper();
-  }, []);
-
-  const [value, setValue] = useState(markdown);
-  return (
-    <div>
-      <Modal
-        className="bg-white p-8 center flex flex-col"
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Example Modal"
-      >
-        <CloseSquareFilled
-          className="self-end my-3 text-2xl"
-          onClick={() => setIsModalOpen(false)}
-        />
-
-        <div className="w-full">
-          <NewTeam />
+  switch (step) {
+    case 1:
+      return <RichtextEditor />;
+    case 2:
+      return (
+        <div className="py-6 grid gap-y-5">
+          <MediaGlobe />
+          <TagSelector />
+          <MoodSelector />
         </div>
-      </Modal>
+      );
+    case 3:
+      return (
+        <div className="w-full grid gap-y-8 py-12 grid-cols-2 items-center justify-items-center">
+          <p className="font-bold text-center text-xl">
+            Select the age range of your target audience
+          </p>
+          <AgeRangeSlider
+            recommendedRange={{ min: 10, max: 30 }}
+            ageIcons={ageIcons}
+          />
 
-      <div className="flex justify-around items-center px-12 w-full py-6">
-        <div className="flex flex-col items-center w-3/5 px-12 pt-8">
-          <div className="w-full flex flex-col">
-            <div className="border-t-1 border-black border-x-1 py-2 px-2 flex items-center gap-2">
-              {openPosts.length ? (
-                openPosts.map((post, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="py-2 flex items-center justify-around bg-black text-white px-4"
-                    >
-                      <div className="w-1/2 mr-4">{post.title}</div>
-                      <CloseSquareOutlined
-                        onClick={() =>
-                          setOpenPosts(
-                            openPosts.filter((p) => p._id !== post._id)
-                          )
-                        }
-                        className="w-1/2"
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <p>Select ideas to start editing</p>
-              )}
-            </div>
+          <div className="">
+            <MapWithNoSSR />
+          </div>
+          <p className="font-bold text-center text-xl">
+            Select the target areas of yours
+          </p>
 
-            <div className="flex w-full">
-              <div className="w-1/5 border-1 border-black flex">
-                <SideBars
-                  className="flex flex-col justify-end border-r-1 border-black w-1/2 items-center"
-                  elementStyleString={`my-1 py-2 px-4 hover:underline hover:cursor-pointer w-full text-center decoration-black`}
-                  elements={["Live", "All", "Edit"]}
-                  selectedElementStyleString={`bg-black text-white`}
-                  sideBarState={sidebarState}
-                  setSideBarState={setSidebarState}
-                />
+          <div className="col-span-2">
+            <p className="font-bold text-center text-xl">
+              What are the common interests of your audience
+            </p>
+          </div>
 
-                <div className="flex flex-col justify-end w-1/2 items-center">
-                  {sidebarState !== "Edit" ? (
-                    dummyFaces.map((face, index) => {
-                      return (
-                        <RoundedFace
-                          txt={face}
-                          size={"S"}
-                          className={
-                            "bg-black text-white flex items-center justify-center my-2"
-                          }
-                          key={index}
-                        />
-                      );
-                    })
-                  ) : (
-                    <div className="pb-2">
-                      {dummyFaces.map((face, index) => {
-                        return (
-                          <RoundedFace
-                            txt={face}
-                            size={"S"}
-                            className={
-                              "bg-black text-white flex items-center justify-center my-2"
-                            }
-                            key={index}
-                          />
-                        );
-                      })}
-                      <button onClick={() => setIsModalOpen(true)}>Edit</button>
-                    </div>
-                  )}
+          <div className="col-span-2 grid grid-cols-6 w-full">
+            <div></div>
+            <div className="col-span-4 grid grid-cols-4 gap-x-2 items-center justify-items-center h-20 gap-y-4">
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
                 </div>
-              </div>
-              <div className="w-4/5 flex flex-col items-center border-b-1 border-r-1 border-t-1 py-4 border-black">
-                <Editor />
-              </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
+              <AnimatedButton>
+                <div className="flex items-center gap-x-2">
+                  <SmileFilled />
+                  <p>Thriller</p>
+                </div>
+              </AnimatedButton>
             </div>
+            <div></div>
           </div>
         </div>
-        <div className="w-2/5 self-stretch flex flex-col justify-around">
-          <div className="w-full flex items-center shadow-2xl">
-            <div className="w-4/5">
-              {ideas && (
-                <IdeaList
-                  ideas={ideas.filter(
-                    (idea) => idea.type === selectedIdeaCategory
-                  )}
-                  addPost={(post) => setOpenPosts([...openPosts, post])}
-                />
-              )}
-            </div>
-            <div className="flex-1 flex flex-col py-4 ml-6">
-              <SideBars
-                className="flex flex-col mx-2"
-                elementStyleString={`my-1 hover:underline hover:cursor-pointer w-full text-center decoration-black py-2 px-4`}
-                elements={ideatypes}
-                selectedElementStyleString={`bg-black text-white`}
-                sideBarState={selectedIdeaCategory}
-                setSideBarState={setSelectedIdeaCategory}
-              />
-            </div>
+      );
+    case 4:
+      return (
+        <div className="w-full grid gap-y-6">
+          <MediaLimit />
+          <BrandGuideLines />
+
+          <div className="border-dashed border-gray-600 border-2 py-16 place-items-center grid">
+            <CloudOutlined className="text-2xl mb-3" />
+            <UploaderButton
+              className={
+                "ut-button:bg-primary ut-button:ut-uploading:bg-primary ut-label:my-3 ut-label:text-muted"
+              }
+              endpoint="imageUploader"
+              onSuccess={(res) => console.log(res)}
+              onError={() => console.log("err or")}
+            />
           </div>
         </div>
-      </div>
+      );
+    default:
+      return <div>Step 1</div>;
+  }
+};
+
+const Editor = () => {
+  const [ideaStep] = useAtom(ideaCurrentStepAtom);
+  const [parsedText] = useAtom(ideaParsedTextAtom);
+
+  const ideaSubmissionHandler = () => {
+    console.log("idea submitted");
+    console.log(parsedText);
+  };
+
+  return (
+    <div className="">
+      <Stepper steps={[1, 2, 3, 4]} StepComponent={ideaStepComponent} />
+      {ideaStep === 3 && (
+        <div className="flex justify-center mb-6">
+          <Button onClick={ideaSubmissionHandler}>Submit</Button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default IdeasPage;
+export default Editor;

@@ -15,6 +15,10 @@ const IdeaSchema = new mongoose.Schema(
       enum: ["video", "blog", "shorts", "podcast", "idea"],
       default: "idea",
     },
+    media: {
+      type: String,
+    },
+    theme: [{ type: String }],
   },
   { timestamps: true }
 );
