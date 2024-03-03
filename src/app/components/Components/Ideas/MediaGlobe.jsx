@@ -1,5 +1,4 @@
 import React from "react";
-import InfoCards from "../Dashboard/InfoCards";
 import AnimatedButton from "../../UI/Buttons/AnimatedButton";
 import {
   FacebookFilled,
@@ -8,55 +7,52 @@ import {
   MediumSquareFilled,
   TwitterCircleFilled,
 } from "@ant-design/icons";
+import { useAtom } from "jotai";
+import { ideaMediaAtom } from "@/app/utils/stateStore/ideaAtoms";
+
+const mediaToIconsMap = {
+  Instagram: <InstagramFilled />,
+  Facebook: <FacebookFilled />,
+  Linkedin: <LinkedinFilled />,
+  Medium: <MediumSquareFilled />,
+  Twitter: <TwitterCircleFilled />,
+};
+
+const Media = ({ text = "tag", isSet, toggleMedia }) => {
+  return (
+    <AnimatedButton selected={isSet} onClick={() => toggleMedia(text)}>
+      <div className="flex items-center justify-around gap-2">
+        {mediaToIconsMap[text]}
+        <div>{text}</div>
+      </div>
+    </AnimatedButton>
+  );
+};
 
 const MediaGlobe = () => {
+  const [medias, setMedias] = useAtom(ideaMediaAtom);
+
   return (
     <div className="py-6">
       <div className="grid grid-cols-4 gap-x-1 items-center">
         <p className="font-bold text-xl pl-4">
           Where do u plan to post this idea?
         </p>
-        <div className="col-span-3 grid grid-cols-4  gap-y-4">
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <InstagramFilled />
-                <div>Instagram</div>
-              </div>
-            </AnimatedButton>
-          </div>
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <FacebookFilled />
-                <div>Facebook Page</div>
-              </div>
-            </AnimatedButton>
-          </div>
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <LinkedinFilled />
-                <div>Linkedin</div>
-              </div>
-            </AnimatedButton>
-          </div>
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <MediumSquareFilled />
-                <div>Medium</div>
-              </div>
-            </AnimatedButton>
-          </div>
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <TwitterCircleFilled />
-                <div>Twitter</div>
-              </div>
-            </AnimatedButton>
-          </div>
+        <div className="col-span-3 grid grid-cols-4 gap-y-4">
+          {Object.keys(mediaToIconsMap).map((media) => (
+            <Media
+              text={media}
+              isSet={medias.includes(media)}
+              key={media}
+              toggleMedia={() =>
+                setMedias((prevMedias) =>
+                  prevMedias.includes(media)
+                    ? prevMedias.filter((item) => item !== media)
+                    : [...prevMedias, media]
+                )
+              }
+            />
+          ))}
         </div>
       </div>
     </div>

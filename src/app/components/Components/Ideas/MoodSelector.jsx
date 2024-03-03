@@ -1,8 +1,35 @@
-import React from "react";
-import AnimatedButton from "../../UI/Buttons/AnimatedButton";
-import { SmileFilled, SmileOutlined, SmileTwoTone } from "@ant-design/icons";
+import React, { useState } from "react";
+import { ideaMoodAtom } from "@/app/utils/stateStore/ideaAtoms";
+import { useAtom } from "jotai";
+import { Button } from "../../utilUI/ui/button";
+const moodTypes = ["Happy", "Sad", "Angry", "Excited", "Bored", "Confused"];
+
+const MoodButton = ({ mood, toggleMood, isSet }) => {
+  return (
+    <Button
+      onClick={() => {
+        toggleMood(mood);
+      }}
+      className={`${isSet ? "bg-black text-white" : "bg-white text-black"}`}
+    >
+      {mood}
+    </Button>
+  );
+};
 
 const MoodSelector = () => {
+  const [moods, setMoods] = useAtom(ideaMoodAtom);
+
+  const handleMoodChange = (mood) => {
+    setMoods((p) => {
+      if (p.includes(mood)) {
+        return p.filter((i) => i !== mood);
+      } else {
+        return [...p, mood];
+      }
+    });
+  };
+
   return (
     <div className="py-6">
       <div className="grid grid-cols-4 gap-x-1 items-center">
@@ -10,30 +37,13 @@ const MoodSelector = () => {
           Where do u plan to post this idea?
         </p>
         <div className="col-span-3 grid grid-cols-4  gap-y-4">
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <SmileFilled />
-                <div>Happy and cheerful</div>
-              </div>
-            </AnimatedButton>
-          </div>
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <SmileTwoTone />
-                <div>Science and Facts</div>
-              </div>
-            </AnimatedButton>
-          </div>
-          <div className={"grid items-center justify-items-center"}>
-            <AnimatedButton>
-              <div className="flex items-center gap-2">
-                <SmileOutlined />
-                <div>Creative and Funny</div>
-              </div>
-            </AnimatedButton>
-          </div>
+          {moodTypes.map((mood) => (
+            <MoodButton
+              mood={mood}
+              toggleMood={handleMoodChange}
+              isSet={moods.includes(mood) ? true : false}
+            />
+          ))}
         </div>
       </div>
     </div>

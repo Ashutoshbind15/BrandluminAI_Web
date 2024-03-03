@@ -11,15 +11,19 @@ import { CloudOutlined, SmileFilled, SmileOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import AnimatedButton from "../../components/UI/Buttons/AnimatedButton";
 import { Button } from "../../components/utilUI/ui/button";
-import { Slider } from "../../components/utilUI/ui/slider/SingleSlider";
 import MediaLimit from "../../components/Components/Ideas/MediaLimit";
 import BrandGuideLines from "../../components/Components/Ideas/BrandGuideLines";
 import UploaderButton from "../../components/Components/UploaderButton";
 import { useAtom } from "jotai";
 import {
+  editorAtom,
   ideaCurrentStepAtom,
+  ideaMediaAtom,
+  ideaMoodAtom,
   ideaParsedTextAtom,
+  ideaTagsAtom,
 } from "../../utils/stateStore/ideaAtoms";
+import { convertToRaw } from "draft-js";
 
 const ageIcons = [
   { age: 65, icon: <SmileFilled /> },
@@ -31,6 +35,54 @@ const MapWithNoSSR = dynamic(
   () => import("../../components/Components/Ideas/GlobalMap"),
   { ssr: false }
 );
+
+const parseEditorContent = (editorState) => {
+  const rawContent = convertToRaw(editorState.getCurrentContent());
+  let parsedContent = "";
+
+  rawContent.blocks.forEach((block) => {
+    switch (block.type) {
+      case "unstyled":
+        parsedContent += block.text + "\n";
+        break;
+      case "unordered-list-item":
+      case "ordered-list-item":
+        parsedContent += `• ${block.text}\n`; // Replace with numbers for ordered list if needed
+        break;
+      case "code-block":
+        parsedContent += `Code block string '${block.text}'\n`;
+        break;
+      case "atomic":
+        const entityKey = block.entityRanges[0]?.key;
+        const entity = rawContent.entityMap[entityKey];
+        if (entity && entity.type === "IMAGE") {
+          const { src } = entity.data;
+          parsedContent += `Image url: '${src}'\n`;
+        }
+        break;
+      default:
+        parsedContent += block.text + "\n";
+        break;
+    }
+
+    // Handling inline styles (like strong)
+    if (block.inlineStyleRanges.length > 0) {
+      block.inlineStyleRanges.forEach((styleRange) => {
+        if (styleRange.style === "BOLD") {
+          const start = styleRange.offset;
+          const end = start + styleRange.length;
+          const boldText = block.text.slice(start, end);
+          parsedContent = parsedContent.replace(
+            boldText,
+            `Emphasized point: ${boldText}`
+          );
+        }
+      });
+    }
+  });
+
+  return parsedContent;
+};
 
 const ideaStepComponent = ({ step }) => {
   const [currSliderValues, setCurrSliderValues] = useState([20]);
@@ -152,11 +204,17 @@ const ideaStepComponent = ({ step }) => {
 
 const Editor = () => {
   const [ideaStep] = useAtom(ideaCurrentStepAtom);
-  const [parsedText] = useAtom(ideaParsedTextAtom);
+  const [editorState] = useAtom(editorAtom);
+  const [moods] = useAtom(ideaMoodAtom);
+  const [tags] = useAtom(ideaTagsAtom);
+  const [media] = useAtom(ideaMediaAtom);
 
   const ideaSubmissionHandler = () => {
     console.log("idea submitted");
-    console.log(parsedText);
+    console.log("parsedText", parseEditorContent(editorState));
+    console.log(moods);
+    console.log(tags);
+    console.log(media);
   };
 
   return (

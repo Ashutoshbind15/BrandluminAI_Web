@@ -4,18 +4,24 @@ import { SearchOutlined, TagOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import PrimaryButton from "../../UI/Buttons/PrimaryButton";
 import AnimatedButton from "../../UI/Buttons/AnimatedButton";
+import { useAtom } from "jotai";
+import { ideaTagsAtom } from "@/app/utils/stateStore/ideaAtoms";
 
-const Tag = ({ text = "tag" }) => {
+const popularTags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4", "Tag 5"];
+
+const Tag = ({ text = "tag", isSet, toggleTag }) => {
   return (
-    <div className="flex items-center justify-center bg-black text-white rounded-lg cursor-pointer hover:scale-105 active:scale-95 transition-all px-4 py-1 mr-2">
-      <TagOutlined />
-      <div className="ml-3">{text}</div>
-    </div>
+    <AnimatedButton selected={isSet} onClick={() => toggleTag(text)}>
+      <div className="flex items-center justify-around gap-2">
+        <TagOutlined />
+        <div>{text}</div>
+      </div>
+    </AnimatedButton>
   );
 };
 
 const TagSelector = () => {
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useAtom(ideaTagsAtom);
   const [ctag, setCtag] = useState("");
 
   return (
@@ -42,45 +48,27 @@ const TagSelector = () => {
           </PrimaryButton>
         </div>
 
-        <div className="my-6 grid grid-cols-4 gap-y-4">
+        {/* <div className="my-6 grid grid-cols-4 gap-y-4">
           {tags.map((tag) => (
             <Tag text={tag} />
           ))}
-        </div>
+        </div> */}
       </div>
       <div>
         <p className="mb-4 text-xl font-bold">Select from the popular tags</p>
         <div className="grid grid-cols-3 gap-y-4 gap-x-2">
-          <AnimatedButton>
-            <div className="flex items-center justify-around gap-2">
-              <TagOutlined />
-              <div>Tag 1</div>
-            </div>
-          </AnimatedButton>
-          <AnimatedButton>
-            <div className="flex items-center justify-around gap-2">
-              <TagOutlined />
-              <div>Tag 1</div>
-            </div>
-          </AnimatedButton>
-          <AnimatedButton>
-            <div className="flex items-center justify-around gap-2">
-              <TagOutlined />
-              <div>Tag 1</div>
-            </div>
-          </AnimatedButton>
-          <AnimatedButton>
-            <div className="flex items-center justify-around gap-2">
-              <TagOutlined />
-              <div>Tag 1</div>
-            </div>
-          </AnimatedButton>
-          <AnimatedButton>
-            <div className="flex items-center justify-around gap-2">
-              <TagOutlined />
-              <div>Tag 1</div>
-            </div>
-          </AnimatedButton>
+          {popularTags.map((tag) => (
+            <Tag
+              text={tag}
+              isSet={tags.includes(tag) ? true : false}
+              key={tag}
+              toggleTag={() =>
+                setTags((p) =>
+                  p.includes(tag) ? p.filter((i) => i !== tag) : [...p, tag]
+                )
+              }
+            />
+          ))}
         </div>
       </div>
     </div>
