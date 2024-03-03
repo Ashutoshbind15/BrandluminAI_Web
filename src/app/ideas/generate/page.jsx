@@ -20,10 +20,11 @@ import {
   ideaCurrentStepAtom,
   ideaMediaAtom,
   ideaMoodAtom,
-  ideaParsedTextAtom,
   ideaTagsAtom,
 } from "../../utils/stateStore/ideaAtoms";
 import { convertToRaw } from "draft-js";
+import axios from "axios";
+import { toast } from "@/app/components/utilUI/ui/use-toast";
 
 const ageIcons = [
   { age: 65, icon: <SmileFilled /> },
@@ -85,8 +86,6 @@ const parseEditorContent = (editorState) => {
 };
 
 const ideaStepComponent = ({ step }) => {
-  const [currSliderValues, setCurrSliderValues] = useState([20]);
-
   switch (step) {
     case 1:
       return <RichtextEditor />;
@@ -197,6 +196,7 @@ const ideaStepComponent = ({ step }) => {
           </div>
         </div>
       );
+
     default:
       return <div>Step 1</div>;
   }
@@ -209,12 +209,28 @@ const Editor = () => {
   const [tags] = useAtom(ideaTagsAtom);
   const [media] = useAtom(ideaMediaAtom);
 
-  const ideaSubmissionHandler = () => {
+  const ideaSubmissionHandler = async () => {
     console.log("idea submitted");
     console.log("parsedText", parseEditorContent(editorState));
     console.log(moods);
     console.log(tags);
     console.log(media);
+
+    const ideaData = {
+      description: parseEditorContent(editorState),
+      theme: moods,
+      type: tags,
+      media,
+    };
+
+    console.log(ideaData);
+
+    // Send the data to the server
+
+    const { data } = await axios.post("/api/idea", ideaData);
+
+    console.log(data);
+    toast("Idea submitted successfully", "success");
   };
 
   return (

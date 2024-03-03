@@ -5,7 +5,7 @@ export const useIdeas = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["ideas"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/ideas");
+      const { data } = await axios.get("/api/idea");
       return data;
     },
   });

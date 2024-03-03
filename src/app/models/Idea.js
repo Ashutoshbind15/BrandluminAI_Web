@@ -4,20 +4,21 @@ const IdeaSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
     },
     team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
-    type: {
-      type: String,
-      enum: ["video", "blog", "shorts", "podcast", "idea"],
-      default: "idea",
-    },
-    media: {
-      type: String,
-    },
+    type: [
+      {
+        type: String,
+      },
+    ],
+    media: [
+      {
+        type: String,
+      },
+    ],
     theme: [{ type: String }],
     audienceInterests: [{ type: String }],
   },
