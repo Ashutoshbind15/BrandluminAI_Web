@@ -17,10 +17,6 @@ const Ideas = () => {
   console.log(ideas);
   return (
     <div className="py-6 px-12">
-      <IdeaListItemLg />
-      <IdeaListItemLg />
-      <IdeaListItemLg />
-
       {ideas?.map((idea) => (
         <IdeaListItemLg
           key={idea?._id}

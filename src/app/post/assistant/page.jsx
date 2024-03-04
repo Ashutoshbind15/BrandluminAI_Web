@@ -19,7 +19,7 @@ import {
 import { TabsContent } from "@radix-ui/react-tabs";
 import axios from "axios";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const IdeaSelector = ({ children, selected, toggleIdea }) => {
   return (
@@ -42,13 +42,18 @@ const IdeaSelector = ({ children, selected, toggleIdea }) => {
 const PostAssistant = () => {
   const [sideTopBarState, setSideTopBarState] = useState("Iterations");
   const [socialState, setSocialState] = useState("Instagram");
-
   const { ideas, ideasError, isIdeasError, isIdeasLoading } = useIdeas();
   const [selectedIdea, setSelectedIdea] = useState();
   const [promptText, setPromptText] = useState("");
-
   const [selectedIdeas, setSelectedIdeas] = useState([]);
-  console.log(selectedIdeas);
+  const [messagesState, setMessagesState] = useState([]);
+
+  useEffect(() => {
+    if (selectedIdea) {
+      const idea = ideas.find((idea) => idea._id === selectedIdea);
+      setMessagesState(idea.chat.messages);
+    }
+  }, [selectedIdea]);
 
   return (
     <div className="flex items-stretch h-screen">
@@ -137,9 +142,7 @@ const PostAssistant = () => {
                   ?.chat ? (
                   <div className="w-full flex flex-col items-center">
                     <div>Chat</div>
-                    {ideas[
-                      ideas.findIndex((sbideas) => sbideas._id === idea)
-                    ]?.chat?.messages?.map((msg) => {
+                    {messagesState.map((msg) => {
                       return (
                         <div
                           className={`py-4 px-6 w-1/2 my-8 rounded-xl shadow-md ${
@@ -173,6 +176,9 @@ const PostAssistant = () => {
                           ideaId: idea,
                         });
 
+                        const msgs = data.messages;
+                        setMessagesState(msgs);
+
                         console.log(data);
                       }}
                     >
@@ -194,10 +200,19 @@ const PostAssistant = () => {
             <SendOutlined
               className="text-xl"
               onClick={async () => {
-                await axios.post("/api/generator", {
+                setMessagesState((p) =>
+                  p.concat({ role: "user", parts: promptText })
+                );
+
+                const { data } = await axios.post("/api/generator", {
                   prompt: promptText,
                   ideaId: selectedIdea,
                 });
+
+                const msgs = data.messages;
+                const lastModelMsg = msgs[msgs.length - 1];
+
+                setMessagesState((p) => [...p, lastModelMsg]);
               }}
             />
           </div>
