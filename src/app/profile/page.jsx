@@ -87,9 +87,17 @@ const Profile = () => {
       {accounts.map((account) => (
         <Button
           onClick={async () => {
-            await axios.post(`/api/socials/${account.provider}`, {
-              author: account.sub,
-            });
+            if (account.provider === "linkedin") {
+              await axios.post(`/api/socials/${account.provider}`, {
+                author: account.sub,
+              });
+            } else if (account.provider === "facebook") {
+              console.log(account, "account");
+              await axios.post(`/api/socials/${account.provider}`, {
+                page_id: account.data[0].id,
+                page_access_token: account.data[0].access_token,
+              });
+            }
           }}
         >
           Publish test content for {account.provider}

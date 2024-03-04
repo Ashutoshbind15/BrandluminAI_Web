@@ -80,7 +80,8 @@ export const authOptions = {
       clientSecret: process.env.INSTAGRAM_SECRET,
       authorization: {
         params: {
-          scope: "instagram_content_publish pages_manage_posts",
+          scope:
+            "instagram_content_publish pages_manage_posts business_management",
         },
       },
     }),
