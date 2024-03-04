@@ -21,6 +21,7 @@ const IdeaSchema = new mongoose.Schema(
     ],
     theme: [{ type: String }],
     audienceInterests: [{ type: String }],
+    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
   },
   { timestamps: true }
 );

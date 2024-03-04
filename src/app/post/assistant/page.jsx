@@ -5,6 +5,9 @@ import IdeaListItemSm from "@/app/components/Components/Ideas/IdeaListItemSm";
 import SideBars from "@/app/components/Layout/SideBars";
 import TopBars from "@/app/components/Layout/TopBars";
 import PrimaryButton from "@/app/components/UI/Buttons/PrimaryButton";
+import { Button } from "@/app/components/utilUI/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/app/components/utilUI/ui/tabs";
+import { useIdeas } from "@/app/utils/hooks/queries";
 import {
   FacebookOutlined,
   InstagramOutlined,
@@ -13,17 +16,61 @@ import {
   TwitterOutlined,
   YoutubeOutlined,
 } from "@ant-design/icons";
+import { TabsContent } from "@radix-ui/react-tabs";
+import axios from "axios";
+
 import React, { useState } from "react";
+
+const IdeaSelector = ({ children, selected, toggleIdea }) => {
+  return (
+    <div
+      onClick={toggleIdea}
+      className={`w-full h-12 flex items-center justify-between px-4 border-b-1 border-black cursor-pointer ${
+        selected ? "bg-white text-black" : "bg-gray-200"
+      }`}
+    >
+      <div>{children}</div>
+      <div
+        className={`w-4 h-4 border-1 border-black bg-white ${
+          selected ? "bg-black" : ""
+        }`}
+      ></div>
+    </div>
+  );
+};
 
 const PostAssistant = () => {
   const [sideTopBarState, setSideTopBarState] = useState("Iterations");
-  const [topBarState, setTopBarState] = useState("Post 1");
   const [socialState, setSocialState] = useState("Instagram");
+
+  const { ideas, ideasError, isIdeasError, isIdeasLoading } = useIdeas();
+  const [selectedIdea, setSelectedIdea] = useState();
+  const [promptText, setPromptText] = useState("");
+
+  const [selectedIdeas, setSelectedIdeas] = useState([]);
+  console.log(selectedIdeas);
 
   return (
     <div className="flex items-stretch h-screen">
       <div className="w-1/4 px-10 flex flex-col justify-around">
-        <IdeaListItemSm xs={true} />
+        {/* <IdeaListItemSm xs={true} /> */}
+
+        {ideas?.map((idea, idx) => (
+          <IdeaSelector
+            key={idea._id}
+            selected={selectedIdeas.includes(idea._id) ? true : false}
+            toggleIdea={() => {
+              selectedIdeas.includes(idea._id)
+                ? setSelectedIdeas(
+                    selectedIdeas.filter((id) => id !== idea._id)
+                  )
+                : setSelectedIdeas([...selectedIdeas, idea._id]);
+            }}
+          >
+            {`Idea ${idx + 1}`}
+          </IdeaSelector>
+        ))}
+
         <div className="">
           <TopBars
             state={sideTopBarState}
@@ -72,75 +119,91 @@ const PostAssistant = () => {
 
       <div className="w-3/4 flex items-stretch">
         <div className="w-3/4 border-x-1 border-black flex flex-col justify-between">
-          <TopBars
-            listItems={["Post 1", "Post 2", "Post 3"]}
-            state={topBarState}
-            setState={setTopBarState}
-            selectedItemStyles={"bg-white text-black"}
-            parentStyles={"py-4 border-y-1 border-black"}
-          />
-          <div className="flex-1 overflow-y-auto px-6 py-10 flex flex-col">
-            <div className="py-4 px-6 w-1/2 my-8 rounded-xl btm-shadow">
-              <div>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque
-                sapiente soluta quibusdam explicabo officiis impedit quia rerum,
-                ipsa velit laudantium dolor aliquam deserunt, earum magni
-                tenetur id fugit assumenda deleniti!
-              </div>
-              <div className="border-t-1 border-black py-1 mt-2">
-                <InfoCards className={"w-1/3"}>
-                  <p className="font-light text-sm">Use as base</p>
-                </InfoCards>
-              </div>
-            </div>
-            <div className="py-4 px-6 w-1/2 my-4 self-end rounded-xl btm-shadow">
-              <div>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque
-                sapiente soluta quibusdam explicabo officiis impedit quia rerum,
-                ipsa velit laudantium dolor aliquam deserunt, earum magni
-                tenetur id fugit assumenda deleniti!
-              </div>
-              <div className="border-t-1 border-black py-1 mt-2">
-                <InfoCards className={"w-1/3"}>
-                  <p className="font-light text-sm">Use as base</p>
-                </InfoCards>
-              </div>
-            </div>
-            <div className="py-4 px-6 w-1/2 my-8 rounded-xl btm-shadow">
-              <div>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque
-                sapiente soluta quibusdam explicabo officiis impedit quia rerum,
-                ipsa velit laudantium dolor aliquam deserunt, earum magni
-                tenetur id fugit assumenda deleniti!
-              </div>
-              <div className="border-t-1 border-black py-1 mt-2">
-                <InfoCards className={"w-1/3"}>
-                  <p className="font-light text-sm">Use as base</p>
-                </InfoCards>
-              </div>
-            </div>
-          </div>
+          <Tabs
+            className="overflow-y-auto"
+            onValueChange={(e) => setSelectedIdea(e)}
+          >
+            <TabsList>
+              {selectedIdeas?.map((idea, idx) => (
+                <TabsTrigger key={idea} value={idea}>
+                  {`Idea ${idx + 1}`}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {selectedIdeas?.map((idea, idx) => (
+              <TabsContent value={idea} key={idea}>
+                {ideas[ideas.findIndex((sbideas) => sbideas._id === idea)]
+                  ?.chat ? (
+                  <div className="w-full flex flex-col items-center">
+                    <div>Chat</div>
+                    {ideas[
+                      ideas.findIndex((sbideas) => sbideas._id === idea)
+                    ]?.chat?.messages?.map((msg) => {
+                      return (
+                        <div
+                          className={`py-4 px-6 w-1/2 my-8 rounded-xl shadow-md ${
+                            msg.role === "user" ? "self-end" : "self-start"
+                          }`}
+                        >
+                          <div>{msg?.parts}</div>
+                          {msg.role === "model" && (
+                            <div className="border-t-1 border-black py-1 mt-2">
+                              <InfoCards className={"w-1/3"}>
+                                <p className="font-light text-sm">
+                                  Use as base
+                                </p>
+                              </InfoCards>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div>
+                    <div>No chat</div>
+                    <Button
+                      onClick={async () => {
+                        const { data } = await axios.post("/api/generator", {
+                          prompt:
+                            ideas[
+                              ideas.findIndex((sbideas) => sbideas._id === idea)
+                            ].description,
+                          ideaId: idea,
+                        });
+
+                        console.log(data);
+                      }}
+                    >
+                      Start Chat
+                    </Button>
+                  </div>
+                )}
+              </TabsContent>
+            ))}
+          </Tabs>
+
           <div className="h-12 bg-gray-200 flex items-center justify-between px-4">
-            <div className="font-light tracking-wide">
-              Type to generate posts using AI
-            </div>
-            <SendOutlined className="text-xl" />
+            <input
+              className="flex-1 font-light tracking-wide"
+              value={promptText}
+              onChange={(e) => setPromptText(e.target.value)}
+              placeholder="Type to generate posts using AI..."
+            />
+            <SendOutlined
+              className="text-xl"
+              onClick={async () => {
+                await axios.post("/api/generator", {
+                  prompt: promptText,
+                  ideaId: selectedIdea,
+                });
+              }}
+            />
           </div>
         </div>
         <div className="w-1/4 flex">
           <SideBars
-            elements={[
-              "Post 1",
-              "Post 2",
-              "Post 3",
-              "Post 4",
-              "Post 5",
-              "Post 6",
-              "Post 7",
-              "Post 8",
-              "Post 9",
-              "Post 10",
-            ]}
             keyedElements={[
               {
                 key: "Instagram",
