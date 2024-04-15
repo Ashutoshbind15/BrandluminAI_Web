@@ -1,4 +1,5 @@
 import User from "@/app/models/User";
+import { getAccessToken } from "@/app/utils/apis/videoIndexer";
 
 export const POST = async (req) => {
   const refreshedAccessToken = await getAccessToken();
