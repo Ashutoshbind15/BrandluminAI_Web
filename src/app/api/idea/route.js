@@ -7,10 +7,16 @@ import { NextResponse } from "next/server";
 export const GET = async (req, res) => {
   try {
     await connectDB();
-    const ideas = await Idea.find({}).populate({
-      path: "chat",
-      model: Chat,
-    });
+    const ideas = await Idea.find({}).populate([
+      {
+        path: "chat",
+        model: Chat,
+      },
+      {
+        path: "mediaAssistants",
+        model: MediaAssistant,
+      },
+    ]);
     return NextResponse.json(ideas, { status: 200 });
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
@@ -39,12 +45,19 @@ export const POST = async (req, res) => {
       const medName = med;
       const assistant = new MediaAssistant({
         providerName: medName,
-        isLocked: False,
+        isLocked: false,
       });
+
+      mediaAssistants.push(assistant._id);
     }
+
+    idea.mediaAssistants = mediaAssistants;
+
+    await idea.save();
 
     return NextResponse.json(idea, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

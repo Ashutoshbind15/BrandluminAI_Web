@@ -11,6 +11,6 @@ const MediaAssistantSchema = new mongoose.Schema({
 
 const MediaAssistant =
   mongoose.models.MediaAssistant ||
-  mongoose.model("MediaAssistant", conversationSchema);
+  mongoose.model("MediaAssistant", MediaAssistantSchema);
 
 export default MediaAssistant;

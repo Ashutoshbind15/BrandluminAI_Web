@@ -51,7 +51,9 @@ const PostAssistant = () => {
   useEffect(() => {
     if (selectedIdea) {
       const idea = ideas.find((idea) => idea._id === selectedIdea);
-      setMessagesState(idea.chat.messages);
+      if (idea.chat) {
+        setMessagesState(idea.chat.messages);
+      }
     }
   }, [selectedIdea]);
 
@@ -84,41 +86,6 @@ const PostAssistant = () => {
             parentStyles={"my-6"}
             selectedItemStyles={"bg-white text-black"}
           />
-
-          <div className="w-full flex items-center flex-wrap pl-2">
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-            <PrimaryButton className="w-5/12 mx-1 flex items-center justify-around my-1">
-              <div className="">Clickable</div>
-              <div className="w-4 h-4 border-1 border-black bg-white"></div>
-            </PrimaryButton>
-          </div>
         </div>
       </div>
 
