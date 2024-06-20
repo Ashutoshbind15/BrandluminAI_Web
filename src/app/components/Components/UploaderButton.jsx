@@ -19,7 +19,6 @@ export default function UploaderButton({
       onUploadError={(error) => {
         // Do something with the error.
         console.log(error);
-        onError();
       }}
     />
   );

@@ -29,17 +29,11 @@ const AccountDropbar = ({ auth }) => {
         <div className="px-2 border-r-1 border-black">
           <ProfileFilled />
         </div>
-        <div className="pt-1 px-2 font-normal">Ashutosh</div>
+        <div className="pt-1 px-2 font-normal">User</div>
       </div>
 
       {isHovered && (
         <div className="absolute bg-white z-30 font-normal px-2 top-full w-80 transform right-0 py-8 shadow-lg flex flex-col items-center">
-          <PrimaryButton
-            onClick={() => router.push("/dashboard")}
-            className={"my-3"}
-          >
-            Dashboard
-          </PrimaryButton>
           <PrimaryButton
             onClick={() => router.push("/profile")}
             className={"my-3"}

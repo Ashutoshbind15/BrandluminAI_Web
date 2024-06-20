@@ -110,7 +110,7 @@ const AuthPage = () => {
         {signup ? "Login" : "Signup"}
       </button>
 
-      <button onClick={() => signIn()}>Sign in with github</button>
+      <button onClick={() => signIn()}>Sign in with accounts</button>
 
       <button onClick={() => signOut()}>Logout</button>
     </main>

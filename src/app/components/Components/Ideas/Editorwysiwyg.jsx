@@ -15,9 +15,14 @@ const Editor = () => {
 
       <div
         contentEditable={true}
-        onKeyDown={(e) => {
+        onKeyDown={(e, i) => {
           if (e.key === "Enter") {
-            setStuff((p) => [...p, <p className="">{cline}</p>]);
+            setStuff((p) => [
+              ...p,
+              <p className="" key={i}>
+                {cline}
+              </p>,
+            ]);
             setCline("");
           }
         }}
