@@ -37,11 +37,12 @@ const MoodSelector = () => {
           Where do u plan to post this idea?
         </p>
         <div className="col-span-3 grid grid-cols-4  gap-y-4">
-          {moodTypes.map((mood) => (
+          {moodTypes.map((mood, i) => (
             <MoodButton
               mood={mood}
               toggleMood={handleMoodChange}
               isSet={moods.includes(mood) ? true : false}
+              key={i}
             />
           ))}
         </div>

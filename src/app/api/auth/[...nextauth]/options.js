@@ -3,10 +3,7 @@ import Account from "@/app/models/Account";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/app/utils/db";
 import { getServerSession } from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import LinkedInProvider from "next-auth/providers/linkedin";
 import FacebookProvider from "next-auth/providers/facebook";
 
 export const authOptions = {
@@ -41,40 +38,7 @@ export const authOptions = {
         };
       },
     }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID ?? "",
-      clientSecret: process.env.GOOGLE_SECRET ?? "",
-      authorization: {
-        params: {
-          scope: "openid https://www.googleapis.com/auth/youtube.force-ssl",
-        },
-      },
-    }),
-    LinkedInProvider({
-      clientId: process.env.LINKEDIN_ID ?? "",
-      clientSecret: process.env.LINKEDIN_SECRET ?? "",
 
-      authorization: {
-        params: {
-          scope: "openid profile email w_member_social",
-        },
-      },
-      issuer: "https://www.linkedin.com",
-      jwks_endpoint: "https://www.linkedin.com/oauth/openid/jwks",
-      async profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          firstname: profile.given_name,
-          lastname: profile.family_name,
-          email: profile.email,
-        };
-      },
-    }),
     FacebookProvider({
       clientId: process.env.INSTAGRAM_ID,
       clientSecret: process.env.INSTAGRAM_SECRET,

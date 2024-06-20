@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema(
     videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
     salt: String,
     accounts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Account" }],
+    videoAccessToken: String,
   },
   { timestamps: true }
 );

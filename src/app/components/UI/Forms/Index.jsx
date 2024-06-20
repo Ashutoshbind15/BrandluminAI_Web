@@ -3,9 +3,11 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const IndexForm = () => {
   const { data: session } = useSession();
+  const rtr = useRouter();
 
   return (
     <div>
@@ -19,6 +21,11 @@ const IndexForm = () => {
           }}
           onSubmit={async (values, { setSubmitting }) => {
             const { data } = await axios.post("/api/videoanalyzer", values);
+
+            const dbid = data.dbid;
+
+            rtr.push(`/videos/${dbid}`);
+
             console.log(data);
           }}
         >

@@ -142,12 +142,13 @@ const PostAssistant = () => {
                   ?.chat ? (
                   <div className="w-full flex flex-col items-center">
                     <div>Chat</div>
-                    {messagesState.map((msg) => {
+                    {messagesState.map((msg, i) => {
                       return (
                         <div
                           className={`py-4 px-6 w-1/2 my-8 rounded-xl shadow-md ${
                             msg.role === "user" ? "self-end" : "self-start"
                           }`}
+                          key={i}
                         >
                           <div>{msg?.parts}</div>
                           {msg.role === "model" && (

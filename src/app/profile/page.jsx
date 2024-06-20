@@ -21,6 +21,8 @@ const Profile = () => {
 
   const [accounts, setAccounts] = useState([]);
 
+  console.log(accounts, "accounts");
+
   const rtr = useRouter();
 
   if (isUserLoading) {
@@ -80,18 +82,13 @@ const Profile = () => {
 
         <CardFooter className="gap-x-6">
           <Button onClick={() => signIn()}>Link Accounts</Button>
-          <Button onClick={() => rtr.push("/dashboard")}>Dashboard</Button>
         </CardFooter>
       </Card>
 
-      {accounts.map((account) => (
+      {accounts.map((account, i) => (
         <Button
           onClick={async () => {
-            if (account.provider === "linkedin") {
-              await axios.post(`/api/socials/${account.provider}`, {
-                author: account.sub,
-              });
-            } else if (account.provider === "facebook") {
+            if (account.provider === "facebook") {
               console.log(account, "account");
               await axios.post(`/api/socials/${account.provider}`, {
                 page_id: account.data[0].id,
@@ -99,6 +96,7 @@ const Profile = () => {
               });
             }
           }}
+          key={i}
         >
           Publish test content for {account.provider}
         </Button>

@@ -6,5 +6,5 @@ export const GET = async (req, { params }) => {
   console.log(params);
   await connectDB();
   const vid = await Video.findById(params.id);
-  return NextResponse.json({ video: vid }, { status: 200 });
+  return NextResponse.json(vid, { status: 200 });
 };
