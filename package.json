@@ -51,6 +51,7 @@
     "react-leaflet": "^4.2.1",
     "react-leaflet-draw": "^0.20.4",
     "react-modal": "^3.16.1",
+    "react-multi-select-component": "^4.3.4",
     "react-simple-maps": "^3.0.0",
     "react-slider": "^2.0.6",
     "server-only": "^0.0.1",

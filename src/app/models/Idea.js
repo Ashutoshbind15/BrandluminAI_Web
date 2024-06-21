@@ -22,12 +22,6 @@ const IdeaSchema = new mongoose.Schema(
     theme: [{ type: String }],
     audienceInterests: [{ type: String }],
     chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
-    mediaAssistants: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "MediaAssistant",
-      },
-    ],
   },
   { timestamps: true }
 );

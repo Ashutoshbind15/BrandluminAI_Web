@@ -36,3 +36,21 @@ export const useUser = () => {
     refetchUser: refetch,
   };
 };
+
+export const useIdea = (ideaId) => {
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["idea", ideaId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/idea/${ideaId}`);
+      return data;
+    },
+  });
+
+  return {
+    idea: data,
+    isIdeaLoading: isLoading,
+    isIdeaError: isError,
+    ideaError: error,
+    refetchIdea: refetch,
+  };
+};
