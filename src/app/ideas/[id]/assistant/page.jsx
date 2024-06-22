@@ -2,8 +2,13 @@
 
 import InfoCards from "@/app/components/Components/Dashboard/InfoCards";
 import { Button } from "@/app/components/utilUI/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/app/components/utilUI/ui/dialog";
 import { generatePromptFromIdea } from "@/app/utils/helperfns";
-import { useIdea } from "@/app/utils/hooks/queries";
+import { useIdea, useUser } from "@/app/utils/hooks/queries";
 import { SendOutlined } from "@ant-design/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -13,6 +18,13 @@ const PostAssistant = ({ params }) => {
   const { idea, ideaError, isIdeaError, isIdeaLoading } = useIdea(id);
   const [promptText, setPromptText] = useState("");
   const [messagesState, setMessagesState] = useState([]);
+
+  const { user, isUserLoading, isUserError, userError, refetchUser } =
+    useUser();
+
+  const [accounts, setAccounts] = useState([]);
+
+  const supportedMedia = ["facebook"];
 
   useEffect(() => {
     if (idea) {
@@ -47,7 +59,66 @@ const PostAssistant = ({ params }) => {
                     {msg.role === "model" && (
                       <div className="border-t-1 border-black py-1 mt-2">
                         <InfoCards className={"w-1/3"}>
-                          <p className="font-light text-sm">Use as base</p>
+                          <Dialog>
+                            <DialogTrigger>
+                              <p className="font-light text-sm">Use as base</p>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <div className="flex flex-col items-center gap-y-3">
+                                {user?.accounts?.map((account) => (
+                                  <div
+                                    key={account.provider}
+                                    className="flex items-center gap-x-4"
+                                  >
+                                    <div>
+                                      <Button
+                                        onClick={async () => {
+                                          const { data } = await axios.get(
+                                            `/api/socials/${account.provider}`
+                                          );
+
+                                          setAccounts((prev) => [
+                                            ...prev,
+                                            {
+                                              ...data,
+                                              provider: account.provider,
+                                            },
+                                          ]);
+                                        }}
+                                      >
+                                        Fetch account details from{" "}
+                                        {account.provider}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {accounts.map((account, i) => {
+                                return (
+                                  <Button
+                                    onClick={async () => {
+                                      if (account.provider === "facebook") {
+                                        console.log(account, "account");
+                                        await axios.post(
+                                          `/api/socials/${account.provider}`,
+                                          {
+                                            page_id: account.data[0].id,
+                                            page_access_token:
+                                              account.data[0].access_token,
+                                            message: msg.parts,
+                                          }
+                                        );
+                                      }
+                                    }}
+                                    key={i}
+                                  >
+                                    Post to {account.provider}
+                                  </Button>
+                                );
+                              })}
+                            </DialogContent>
+                          </Dialog>
                         </InfoCards>
                       </div>
                     )}

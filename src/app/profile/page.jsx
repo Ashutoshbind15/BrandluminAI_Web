@@ -34,8 +34,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-screen items-center justify-center flex flex-col">
-      <div className="w-screen">{JSON.stringify(user)}</div>
+    <div className="w-screen items-center justify-center flex flex-col min-h-screen">
       <Card className="w-1/2 px-4">
         <CardHeader>
           <div className="flex justify-between items-center">
@@ -54,7 +53,7 @@ const Profile = () => {
           <div>Accounts</div>
           {user.accounts.map((account) => (
             <div key={account.provider} className="flex items-center gap-x-4">
-              <div>
+              <div className="flex-1">
                 <div>{account.provider}</div>
                 <div>{account.accountId}</div>
               </div>
@@ -80,7 +79,7 @@ const Profile = () => {
           ))}
         </CardContent>
 
-        <CardFooter className="gap-x-6">
+        <CardFooter className="gap-x-6 flex justify-center">
           <Button onClick={() => signIn()}>Link Accounts</Button>
         </CardFooter>
       </Card>
@@ -93,6 +92,7 @@ const Profile = () => {
               await axios.post(`/api/socials/${account.provider}`, {
                 page_id: account.data[0].id,
                 page_access_token: account.data[0].access_token,
+                message: "Hello World",
               });
             }
           }}

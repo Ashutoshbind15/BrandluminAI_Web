@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import UploaderButton from "../components/Components/UploaderButton";
 import { signIn, signOut, useSession } from "next-auth/react";
 import axios from "axios";
+import { Button } from "../components/utilUI/ui/button";
+import { useRouter } from "next/navigation";
 
 const AuthPage = () => {
   const { data: session, status } = useSession();
@@ -11,7 +12,6 @@ const AuthPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
   const [signup, setSignup] = useState(true);
 
   const signupHandler = async (e) => {
@@ -23,8 +23,6 @@ const AuthPage = () => {
       role: "user",
       email: email,
     });
-
-    console.log(data);
 
     signIn("credentials", {
       email,
@@ -45,8 +43,6 @@ const AuthPage = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center text-black ">
-      {/* <UploaderButton /> */}
-      {JSON.stringify(session, null, 2)}
       {status === "loading" && <p>Loading...</p>}
 
       <form
@@ -98,21 +94,21 @@ const AuthPage = () => {
           </div>
         )}
 
-        <button
-          type="submit"
-          className="bg-blue-700 text-white px-4 py-2 mt-3 rounded-full hover:scale-105 transition-all"
-        >
+        <Button type="submit" className="mt-4">
           Submit
-        </button>
+        </Button>
       </form>
 
-      <button onClick={() => setSignup((prev) => !prev)}>
-        {signup ? "Login" : "Signup"}
-      </button>
+      <div className="flex flex-col gap-y-3 mt-5">
+        <Button onClick={() => setSignup((prev) => !prev)}>
+          {signup
+            ? "Already have an account? Login"
+            : "Need an account? Signup"}
+        </Button>
 
-      <button onClick={() => signIn()}>Sign in with accounts</button>
-
-      <button onClick={() => signOut()}>Logout</button>
+        <Button onClick={() => signIn()}>Sign in with accounts</Button>
+        {session ? <Button onClick={() => signOut()}>Logout</Button> : null}
+      </div>
     </main>
   );
 };

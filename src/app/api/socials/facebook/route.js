@@ -62,12 +62,12 @@ export const GET = async () => {
 
 export const POST = async (req) => {
   const jsonBody = await req.json();
-  const { page_access_token, page_id } = jsonBody;
+  const { page_access_token, page_id, message } = jsonBody;
 
   const { data: pageData } = await axios.post(
     `https://graph.facebook.com/v19.0/${page_id}/feed`,
     {
-      message: "Hello, world!",
+      message,
       access_token: page_access_token,
     },
     {
