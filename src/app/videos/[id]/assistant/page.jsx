@@ -2,37 +2,39 @@
 
 import InfoCards from "@/app/components/Components/Dashboard/InfoCards";
 import { Button } from "@/app/components/utilUI/ui/button";
-import { generatePromptFromIdea } from "@/app/utils/helperfns";
-import { useIdea } from "@/app/utils/hooks/queries";
+import { useVideo } from "@/app/utils/hooks/queries";
 import { SendOutlined } from "@ant-design/icons";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-const PostAssistant = ({ params }) => {
+const VideoAssistant = ({ params }) => {
   const { id } = params;
-  const { idea, ideaError, isIdeaError, isIdeaLoading } = useIdea(id);
+
+  const { video, isVideoError, isVideoLoading, refetchVideo, videoError } =
+    useVideo(id);
+
   const [promptText, setPromptText] = useState("");
   const [messagesState, setMessagesState] = useState([]);
 
   useEffect(() => {
-    if (idea) {
-      if (idea.chat) setMessagesState(idea.chat.messages);
+    if (video) {
+      if (video.chat) setMessagesState(video.chat.messages);
     }
-  }, [idea]);
+  }, [video]);
 
-  if (isIdeaLoading) {
+  if (isVideoLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isIdeaError) {
-    return <div>Error: {ideaError.message}</div>;
+  if (isVideoError) {
+    return <div>Error: {videoError.message}</div>;
   }
 
   return (
     <div className="flex justify-center pt-20">
       <div className="w-3/4 shadow-lg flex flex-col justify-between h-96 overflow-y-auto">
         <div className="px-6 pt-6">
-          {idea?.chat ? (
+          {video?.chat ? (
             <div className="w-full flex flex-col items-center">
               <div>Chat</div>
               {messagesState?.map((msg, i) => {
@@ -60,9 +62,9 @@ const PostAssistant = ({ params }) => {
               <div>No chat</div>
               <Button
                 onClick={async () => {
-                  const { data } = await axios.post("/api/generator", {
-                    prompt: generatePromptFromIdea(idea),
-                    ideaId: idea._id,
+                  const { data } = await axios.post("/api/video/content", {
+                    id: video._id,
+                    media: ["Facebook"],
                   });
 
                   const msgs = data.messages;
@@ -89,9 +91,10 @@ const PostAssistant = ({ params }) => {
                 p.concat({ role: "user", parts: promptText })
               );
 
-              const { data } = await axios.post("/api/generator", {
+              const { data } = await axios.post("/api/video/content", {
+                id: video._id,
                 prompt: promptText,
-                ideaId: idea._id,
+                media: ["Facebook"],
               });
 
               const msgs = data.messages;
@@ -106,4 +109,4 @@ const PostAssistant = ({ params }) => {
   );
 };
 
-export default PostAssistant;
+export default VideoAssistant;

@@ -5,6 +5,6 @@ import { NextResponse } from "next/server";
 export const GET = async (req, { params }) => {
   console.log(params);
   await connectDB();
-  const vid = await Video.findById(params.id);
+  const vid = await Video.findById(params.id).populate("chat");
   return NextResponse.json(vid, { status: 200 });
 };

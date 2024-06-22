@@ -1,6 +1,8 @@
 "use client";
+import { useRouter } from "next/navigation";
 import Redirect from "../components/Client/Redirectors/Redirect";
 import { useIdeas } from "../utils/hooks/queries";
+import { Button } from "../components/utilUI/ui/button";
 
 const TagListRenderer = ({ tags }) => {
   return (
@@ -15,6 +17,8 @@ const TagListRenderer = ({ tags }) => {
 };
 
 const IdeaListItem = ({ idea }) => {
+  const rtr = useRouter();
+
   return (
     <div className="w-1/4 p-3">
       <div className="border-2 border-black rounded-lg px-2 py-5">
@@ -38,6 +42,16 @@ const IdeaListItem = ({ idea }) => {
         <div className="flex items-center my-2">
           <div className="text-sm font-bold flex-1">Media:</div>
           <TagListRenderer tags={idea?.media} />
+        </div>
+
+        <div>
+          <Button
+            onClick={() => {
+              rtr.push(`/ideas/${idea?._id}/assistant`);
+            }}
+          >
+            Generate
+          </Button>
         </div>
       </div>
     </div>

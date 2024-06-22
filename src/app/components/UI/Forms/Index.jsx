@@ -12,7 +12,6 @@ const IndexForm = () => {
   return (
     <div>
       <div>
-        <h1>Any place in your app!</h1>
         <Formik
           initialValues={{ url: "", name: "" }}
           validate={(values) => {

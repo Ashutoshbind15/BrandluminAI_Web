@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const VideoRenderer = async ({ vids }) => {
+const VideoRenderer = ({ vids }) => {
   return (
     <div className="my-6">
       {vids.map((vid) => (
@@ -12,12 +12,6 @@ const VideoRenderer = async ({ vids }) => {
             <video src={vid.fileUrl} controls className="h-96 w-96"></video>
           </div>
           <div className="flex flex-col items-center ml-32">
-            <div className="text-xl font-bold text-black font-mono">
-              {vid.title}
-            </div>
-            <div className="text-xl font-bold text-black font-mono">
-              {vid.description}
-            </div>
             <Link className="" href={vid.data ? `/videos/${vid._id}` : "/"}>
               {vid.data ? "Analysis" : "Analyze"}
             </Link>
