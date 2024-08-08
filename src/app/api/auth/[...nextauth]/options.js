@@ -45,7 +45,7 @@ export const authOptions = {
       authorization: {
         params: {
           scope:
-            "instagram_content_publish pages_manage_posts business_management",
+            "instagram_content_publish pages_manage_posts business_management pages_manage_metadata",
         },
       },
     }),
