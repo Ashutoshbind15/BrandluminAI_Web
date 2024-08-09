@@ -20,6 +20,14 @@ const Navbar = () => {
         >
           Videos
         </Link>
+
+        <Link
+          href="/assets/images"
+          className="px-4 border-r-1 border-black hover:font-semibold hover:decoration-black active:underline hover:underline"
+        >
+          ImageLib
+        </Link>
+
         <Link
           href="/ideas"
           className="px-4 border-black hover:font-semibold hover:decoration-black active:underline hover:underline"
