@@ -20,6 +20,7 @@ const conversationSchema = new mongoose.Schema({
   messages: [messageSchema], // An array of messages
 });
 
-const Chat = mongoose.models.Chat || mongoose.model("Chat", conversationSchema);
+const Chat =
+  mongoose.models?.Chat || mongoose.model("Chat", conversationSchema);
 
 export default Chat;

@@ -55,14 +55,62 @@ export const GET = async () => {
     `https://graph.facebook.com/v19.0/me/accounts?access_token=${FBAccessToken}`
   );
 
-  return NextResponse.json(data, {
-    status: 200,
-  });
+  user.facebookPageId = data?.data[0]?.id;
+  user.facebookPageAccessToken = data?.data[0]?.access_token;
+
+  await user.save();
+
+  return NextResponse.json(
+    { message: "success" },
+    {
+      status: 200,
+    }
+  );
 };
 
 export const POST = async (req) => {
   const jsonBody = await req.json();
-  const { page_access_token, page_id, message } = jsonBody;
+
+  const sess = await getServerSession(authOptions);
+
+  if (!sess)
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      {
+        status: 401,
+      }
+    );
+
+  const uid = sess.user.id;
+
+  const dbuser = await User.findById(uid).populate("accounts");
+
+  const isFBConnected = dbuser.accounts.some(
+    (account) => account.provider === "facebook"
+  );
+
+  if (!isFBConnected) {
+    return NextResponse.json(
+      { error: "FB not connected" },
+      {
+        status: 401,
+      }
+    );
+  }
+
+  const page_id = dbuser.facebookPageId;
+  const page_access_token = dbuser.facebookPageAccessToken;
+
+  if (!page_id || !page_access_token) {
+    return NextResponse.json(
+      { error: "FB not connected" },
+      {
+        status: 401,
+      }
+    );
+  }
+
+  const { message } = jsonBody;
 
   const { data: pageData } = await axios.post(
     `https://graph.facebook.com/v19.0/${page_id}/feed`,

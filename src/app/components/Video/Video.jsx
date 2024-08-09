@@ -45,8 +45,10 @@ const BackOffVideoAnalysisFetcher = ({ id, setVid }) => {
 
   return (
     <div>
-      <p>{data?.state}</p>
-      <p>Processing...</p>
+      {/* <p>{data?.state}</p> */}
+      <Button disabled className="mt-4">
+        Processing...
+      </Button>
     </div>
   );
 };
@@ -87,12 +89,37 @@ const Video = ({ video }) => {
                   <Button
                     onClick={async (e) => {
                       e.preventDefault();
-                      const { data } = await axios.post(`/api/videoanalyzer`, {
-                        url: vid.fileUrl,
-                        name,
-                      });
+                      try {
+                        const { data } = await axios.post(
+                          `/api/videoanalyzer`,
+                          {
+                            url: vid.fileUrl,
+                            name,
+                          }
+                        );
 
-                      setVid((prev) => ({ ...prev, fileId: data.video.id }));
+                        console.log(data, "upload data");
+
+                        setVid((prev) => ({ ...prev, fileId: data.video.id }));
+                      } catch (error) {
+                        console.log(`Error in uploading`, error);
+
+                        if (error.response.status === 401) {
+                          const { data } = await axios.post(
+                            `/api/videoanalyzer`,
+                            {
+                              url: vid.fileUrl,
+                              name,
+                            }
+                          );
+                          setVid((prev) => ({
+                            ...prev,
+                            fileId: data.video.id,
+                          }));
+                        }
+
+                        console.error("Error uploading video:", error);
+                      }
                     }}
                   >
                     Analyze

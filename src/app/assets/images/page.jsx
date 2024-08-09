@@ -9,18 +9,14 @@ const ImageAssetCollectionPage = async () => {
   const sess = await getServerSession(authOptions);
   const initialImages = await getImages(0, take);
 
-  console.log("initialImages", initialImages);
-
   if (!sess || !sess.user) {
     return <div>Not logged in</div>;
   }
 
   return (
-    <>
-      <div className="flex flex-col gap-3">
-        <ImageList initialImages={initialImages} />
-      </div>
-    </>
+    <div className="flex flex-col gap-3">
+      <ImageList initialImages={initialImages} />
+    </div>
   );
 };
 

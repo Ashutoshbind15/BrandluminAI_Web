@@ -17,7 +17,7 @@ const Footer = () => {
       <div className="flex flex-col items-center justify-center w-1/5">
         <div className="text-xl font-bold tracking-wider">BrandLuminAI</div>
 
-        <div className="text-center">Built with ❤️ by Ashutosh Bind</div>
+        <div className="text-center">Built by Ashutosh Bind</div>
       </div>
 
       <div className="w-4/5 flex items-center">
