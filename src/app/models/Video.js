@@ -6,14 +6,14 @@ const VideoSchema = new mongoose.Schema({
     required: "File URL is required",
   },
   fileId: String,
-  title: {
-    type: String,
-  },
-  description: String,
   data: {
     type: Object,
     default: {},
     required: "Data is required",
+  },
+  chat: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Chat",
   },
 });
 

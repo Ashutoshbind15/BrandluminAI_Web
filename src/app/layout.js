@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Layout from "./components/Layout/Layout";
+import { Toaster } from "./components/utilUI/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +15,7 @@ export default function RootLayout({ children, session }) {
     <html lang="en">
       <body>
         <Layout session={session}>{children}</Layout>
+        <Toaster />
       </body>
     </html>
   );

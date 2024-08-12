@@ -29,10 +29,20 @@ export const POST = async (req, res) => {
     const sess = await getServerSession(authOptions);
     const user = sess?.user;
     const dbUser = await User.findById(user?.id);
-    const accessToken = dbUser?.videoAccessToken;
+    let accessToken = dbUser?.videoAccessToken;
 
-    if (!accessToken || hasAnHourPassed(dbUser?.updatedAt)) {
+    if (
+      !accessToken ||
+      !accessToken.length ||
+      hasAnHourPassed(dbUser?.updatedAt)
+    ) {
       console.log("renewal");
+      const newToken = await getAccessToken();
+      accessToken = newToken;
+
+      await User.findByIdAndUpdate(user?.id, {
+        videoAccessToken: newToken,
+      });
     } else {
       console.log("no renewal");
     }
@@ -82,7 +92,25 @@ export const GET = async (req) => {
     }
 
     const dbUser = await User.findById(user?.id);
-    const accessToken = dbUser?.videoAccessToken;
+    let accessToken = dbUser?.videoAccessToken;
+
+    if (
+      !accessToken ||
+      !accessToken.length ||
+      hasAnHourPassed(dbUser?.updatedAt)
+    ) {
+      console.log("renewal");
+
+      const newToken = await getAccessToken();
+      accessToken = newToken;
+
+      await User.findByIdAndUpdate(user?.id, {
+        videoAccessToken: newToken,
+      });
+    } else {
+      console.log("no renewal");
+    }
+
     const video = await Video.findById(id);
 
     if (video?.data && Object.keys(video.data).length > 0) {
@@ -103,6 +131,19 @@ export const GET = async (req) => {
     return NextResponse.json(analyzedVideo, { status: 200 });
   } catch (error) {
     console.log(error);
+    if (error.response.status === 401) {
+      const newToken = await getAccessToken();
+      await connectDB();
+
+      const sess = await getServerSession(authOptions);
+      const user = sess?.user;
+
+      await User.findByIdAndUpdate(user?.id, {
+        videoAccessToken: newToken,
+      });
+
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     return NextResponse.json(error, { status: 500 });
   }
 };

@@ -1,26 +1,43 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import VideoRenderer from "../components/Server/VideoRenderer";
-import VideoClientHelper from "../components/Wrappers/ClientComponent/VideoClientHelper";
+import UploaderButton from "../components/Components/UploaderButton";
+import { Button } from "../components/utilUI/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "../components/utilUI/ui/dialog";
+import axios from "axios";
+import { useToast } from "../components/utilUI/ui/use-toast";
+import AnalysisConsumer from "../components/Video/AnalysisConsumer";
+import { useRouter } from "next/navigation";
+import Video from "../components/Video/Video";
+import { useVideos } from "../utils/hooks/queries";
 
 const VideosRenderer = () => {
-  const [vids, setVids] = useState(null);
-
-  useEffect(() => {
-    const fetchVids = async () => {
-      const res = await fetch("/api/video");
-      const data = await res.json();
-      setVids(data);
-    };
-
-    fetchVids();
-  }, []);
+  const {
+    videos: vids,
+    isVideosLoading,
+    videosError,
+    refetchVideos,
+    isVideosError,
+  } = useVideos();
 
   return (
-    <VideoClientHelper>
-      {vids ? <VideoRenderer vids={vids} /> : null}
-    </VideoClientHelper>
+    <>
+      <div className="my-6 flex flex-wrap items-center justify-around">
+        {vids?.map((vid) => (
+          <Video video={vid} key={vid._id} />
+        ))}
+      </div>
+      <UploaderButton
+        onSuccess={(res) => {
+          console.log(res);
+          refetchVideos();
+        }}
+      />
+    </>
   );
 };
 

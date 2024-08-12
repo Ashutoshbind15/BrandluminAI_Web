@@ -23,10 +23,12 @@ const UserSchema = new mongoose.Schema(
     salt: String,
     accounts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Account" }],
     videoAccessToken: String,
+    facebookPageId: String,
+    facebookPageAccessToken: String,
   },
   { timestamps: true }
 );
 
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
+const User = mongoose.models?.User || mongoose.model("User", UserSchema);
 
 export default User;
